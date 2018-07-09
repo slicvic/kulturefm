@@ -7,17 +7,13 @@
 
 <script>
     import Stations from './components/Stations.vue'
+    import * as stationsSvc from './services/stations.js'
 
     export default {
         name: 'app',
         data: function() {
             return {
-                stations: [
-                    {
-                        name: 'rock',
-                        title: 'Rock & Roll'
-                    }
-                ]
+                stations: stationsSvc.getStations()
             }
         },
         methods: {
