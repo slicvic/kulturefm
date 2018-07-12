@@ -2,18 +2,21 @@
     <div class="app">
         <h1>VueRadio</h1>
         <stations :stations="stations" @selectStation="onSelectStation"></stations>
+        <player :tracks="tracks"></player>
     </div>
 </template>
 
 <script>
     import Stations from './components/Stations.vue'
-    import * as stationsSvc from './services/stations.js'
+    import Player from './components/Player.vue'
+    import * as stationSvc from './services/stations.js'
 
     export default {
         name: 'app',
         data: function() {
             return {
-                stations: stationsSvc.getStations()
+                stations: stationSvc.getStations(),
+                tracks: []
             }
         },
         methods: {
@@ -22,7 +25,8 @@
             }
         },
         components: {
-            Stations
+            Stations,
+            Player
         }
     }
     
