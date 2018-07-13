@@ -6,12 +6,6 @@
 
 <script>
 export default {
-    name: 'player',
-    props: {
-        tracks: {
-            type: Array,
-            required: true
-        }
-    }
+    name: 'player'
 }
 </script>

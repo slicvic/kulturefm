@@ -1,10 +1,9 @@
 <template>
     <div class="stations">
-        <h1>Stations</h1>
+        <h2>Stations</h2>
         <ul>
             <li v-for="station in stations" :key="station.name">
-                <a href="#"
-                    @click.prevent="selectStation(station)">{{ station.title }}</a>
+                <a href="#" @click.prevent="change(station)">{{ station.title }}</a>
             </li>
         </ul>
     </div>
@@ -13,15 +12,17 @@
 <script>
     export default {
         name: 'stations',
-        props: {
-            stations: {
-                type: Array,
-                required: true
+        data: function() {
+            return {
+                stations: []
             }
         },
+        created: function() {
+            this.stations = this.$store.state.stations
+        },
         methods: {
-            selectStation: function(station) {
-                this.$emit('selectStation', station)
+            change: function(station) {
+                this.$emit('change', station)
             }
         }
     }

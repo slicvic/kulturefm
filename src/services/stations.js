@@ -1,4 +1,4 @@
-import * as genreSvc from './genres.js'
+import genreSvc from './genres.js'
 
 const StationType = {
     GENRE: 'genre'
@@ -14,6 +14,8 @@ genreSvc.getGenres().forEach(genre => {
     })
 })
 
-export function getStations() {
-    return stations
+export default {
+    getStations () {
+        return stations
+    }
 }

@@ -1,27 +1,25 @@
 <template>
     <div class="app">
         <h1>VueRadio</h1>
-        <stations :stations="stations" @selectStation="onSelectStation"></stations>
-        <player :tracks="tracks"></player>
+        <stations @change="changeStation"></stations>
+        <player v-if="showPlayer"></player>
     </div>
 </template>
 
 <script>
     import Stations from './components/Stations.vue'
     import Player from './components/Player.vue'
-    import * as stationSvc from './services/stations.js'
 
     export default {
         name: 'app',
         data: function() {
             return {
-                stations: stationSvc.getStations(),
-                tracks: []
+                showPlayer: false
             }
         },
         methods: {
-            onSelectStation: function(station) {
-                console.log('selected station', station)
+            changeStation: function(station) {
+                console.log(station)
             }
         },
         components: {

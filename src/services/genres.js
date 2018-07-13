@@ -5,6 +5,8 @@ const genres = [
     }
 ]
 
-export function getGenres() {
-    return genres
+export default {
+    getGenres () {
+        return genres
+    }
 }
