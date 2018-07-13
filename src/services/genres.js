@@ -6,7 +6,7 @@ const genres = [
 ]
 
 export default {
-    getGenres () {
+    getGenres() {
         return genres
     }
 }

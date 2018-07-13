@@ -15,7 +15,7 @@ genreSvc.getGenres().forEach(genre => {
 })
 
 export default {
-    getStations () {
+    getStations() {
         return stations
     }
 }
