@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <h1>VueRadio</h1>
-        <stations @change="changeStation"></stations>
+        <stations @change="setStation"></stations>
         <player v-if="showPlayer"></player>
     </div>
 </template>
@@ -12,14 +12,14 @@
 
     export default {
         name: 'app',
-        data: function() {
+        data() {
             return {
                 showPlayer: false
             }
         },
         methods: {
-            changeStation: function(station) {
-                console.log(station)
+            setStation(station) {
+                this.$store.dispatch('setStation', station)
             }
         },
         components: {

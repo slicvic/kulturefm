@@ -12,16 +12,16 @@
 <script>
     export default {
         name: 'stations',
-        data: function() {
+        data() {
             return {
                 stations: []
             }
         },
-        created: function() {
+        created() {
             this.stations = this.$store.state.stations
         },
         methods: {
-            change: function(station) {
+            change(station) {
                 this.$emit('change', station)
             }
         }
