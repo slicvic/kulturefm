@@ -3,7 +3,7 @@
         <h2>Stations</h2>
         <ul>
             <li v-for="station in stations" :key="station.name">
-                <a href="#" @click.prevent="change(station)">{{ station.title }}</a>
+                <a href="#" @click.prevent="selectStation(station)">{{ station.title }}</a>
             </li>
         </ul>
     </div>
@@ -21,8 +21,8 @@
             this.stations = this.$store.state.stations
         },
         methods: {
-            change(station) {
-                this.$emit('change', station)
+            selectStation(station) {
+                this.$store.dispatch('setStation', station)
             }
         }
     }

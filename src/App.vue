@@ -1,30 +1,25 @@
 <template>
     <div class="app">
         <h1>VueRadio</h1>
-        <stations @change="setStation"></stations>
-        <player v-if="showPlayer"></player>
+        <stations v-if="view == 'stations'"></stations>
+        <player-container v-if="view == 'player'"></player-container>
     </div>
 </template>
 
 <script>
     import Stations from './components/Stations.vue'
-    import Player from './components/Player.vue'
+    import PlayerContainer from './components/PlayerContainer.vue'
 
     export default {
         name: 'app',
-        data() {
-            return {
-                showPlayer: false
-            }
-        },
-        methods: {
-            setStation(station) {
-                this.$store.dispatch('setStation', station)
+        computed: {
+            view() {
+                return this.$store.state.view 
             }
         },
         components: {
             Stations,
-            Player
+            PlayerContainer
         }
     }
     
