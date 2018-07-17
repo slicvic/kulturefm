@@ -9,25 +9,23 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         stations: stationSvc.getStations(),
-        selectedStation: null, 
-        view: 'stations' // stations, player
+        currentStation: null
     },
     getters: {
     },
     mutations: {
         setStation(state, station) {
-            state.selectedStation = station
-            state.view = 'player'
+            state.currentStation = station
         }
     },
     actions: {
         setStation(context, station) {
-            soundcloudSvc.findTracksByGenre(station.name)
-                .then((tracks) => {
-                    const stationCloned = _.cloneDeep(station);
-                    stationCloned.tracks = tracks;
-                    context.commit('setStation', stationCloned) // calls mutation
-                });
-        }
+            const successCallback = tracks => {
+                const stationClone = _.cloneDeep(station);
+                stationClone.tracks = tracks;
+                context.commit('setStation', stationClone)
+            }
+            soundcloudSvc.getTracksByGenre(station.name, successCallback);
+        } 
     }
   })
