@@ -5,10 +5,15 @@ SC.initialize({
 })
 
 export default {
-    findTracksByGenre(genre) {
-        return SC.get('/tracks', {genres: genre});
+    getTracksByGenre(genre, successCallback, failureCallback) {
+        return SC.get('/tracks', {
+            genres: genre,
+            limit: 100
+        })
+        .then(tracks => successCallback(tracks))
+        .catch(failureCallback)
     },
-    playTrack(trackId) {
+    streamTrack(trackId) {
         return SC.stream('/tracks/' + trackId);
     }
 }

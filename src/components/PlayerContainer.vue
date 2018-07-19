@@ -1,6 +1,6 @@
 <template>
     <div class="player-container">
-        <player :tracks="station.tracks"></player>
+        <player :tracks="currentStation.tracks || []"></player>
     </div>
 </template>
 
@@ -10,8 +10,8 @@ import Player from './Player.vue'
 export default {
     name: 'player-container',
     computed: {
-        station() {
-            return this.$store.state.selectedStation
+        currentStation() {
+            return this.$store.state.currentStation || {}
         }
     },
     components: {
