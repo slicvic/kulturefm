@@ -4,6 +4,7 @@
         <button :disabled="!canGoToPrevTrack" @click="prev">Prev</button>
         <button :disabled="!isPlayingOrPaused" @click="togglePlay">{{ playBtnText }}</button>
         <button :disabled="!canGoToNextTrack" @click="next">Next</button>
+        <button @click="toggleMute">{{ muted ? 'Unmute' : 'Mute' }}</button>
         <ul>
             <li v-for="track in tracks" :key="track.id">{{ track.title }}</li>
         </ul>
@@ -43,15 +44,13 @@ export default {
         }
     },
     watch: {
-        status(newStatus, oldStatus) {
+        status(newValue) {
             if (this.audioPlayer) {
-                if (newStatus === Status.PLAYING) {
+                if (newValue === Status.PLAYING) {
                     this.audioPlayer.play()
                 } else {
                     this.audioPlayer.pause()
                 }
-            } else {
-                // Do nothing
             }
         },
         tracks() {
@@ -61,6 +60,11 @@ export default {
                 this.status = Status.READY
                 this.currentTrack = null
                 this.currentTrackIndex = -1
+            }
+        },
+        muted(newValue) {
+            if (this.audioPlayer) {
+                this.audioPlayer.setVolume(newValue === true ? 0 : 1)
             }
         }
     },
@@ -102,6 +106,9 @@ export default {
         prev() {
             this.playTrackByIndex(this.currentTrackIndex - 1)
         },
+        toggleMute() {
+            this.muted = !this.muted
+        },
         playTrackByIndex(index) {
             this.setStatus(Status.LOADING)
             const trackToPlay = this.tracks[index]
@@ -110,14 +117,18 @@ export default {
             if (trackToPlay) {
                 this.currentTrackIndex = index
                 this.currentTrack = trackToPlay
+
                 soundcloudSvc.streamTrack(trackToPlay.id)
                     .then(player => {
                         this.audioPlayer = player
-                        this.audioPlayer.play().then(() => {
-                            this.setStatus(Status.PLAYING)
-                        }).catch(e => {
-                            this.setStatus(Status.ERROR)
-                        })
+
+                        if (this.muted) {
+                            this.audioPlayer.setVolume(0)
+                        }
+
+                        this.audioPlayer.play()
+                            .then(() => this.setStatus(Status.PLAYING))
+                            .catch(e => this.setStatus(Status.ERROR))
                     }).catch(e => {
                         this.setStatus(Status.ERROR)
                     })
