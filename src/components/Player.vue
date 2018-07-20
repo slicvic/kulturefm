@@ -15,7 +15,7 @@
 import soundcloudSvc from '../services/soundcloud.js'
 
 const Status = {
-    READY: 'ready',
+    IDLE: 'idle',
     LOADING: 'loading',
     PLAYING: 'playing',
     PAUSED: 'paused',
@@ -23,11 +23,10 @@ const Status = {
     ERROR: 'error'
 }
 
+let audioObj = null
+
 export default {
     name: 'player',
-    created() {
-
-    },
     props: {
         tracks: {
             type: Array,
@@ -36,35 +35,18 @@ export default {
     },
     data() {
         return {
-            status: Status.READY,
+            status: Status.IDLE,
             currentTrack: null,
             currentTrackIndex: -1,
-            audioPlayer: null,
             muted: false
         }
     },
     watch: {
-        status(newValue) {
-            if (this.audioPlayer) {
-                if (newValue === Status.PLAYING) {
-                    this.audioPlayer.play()
-                } else {
-                    this.audioPlayer.pause()
-                }
-            }
-        },
         tracks() {
             if (this.trackCount) {
-                this.playTrackByIndex(0)
+                this.loadTrack(0).then(() => this.play())
             } else {
-                this.status = Status.READY
-                this.currentTrack = null
-                this.currentTrackIndex = -1
-            }
-        },
-        muted(newValue) {
-            if (this.audioPlayer) {
-                this.audioPlayer.setVolume(newValue === true ? 0 : 1)
+               this.setInitialStatus()
             }
         }
     },
@@ -91,50 +73,94 @@ export default {
         }
     },
     methods: {
-        isStatus(status) {
-            return this.status === status
-        },
-        setStatus(status) {
-            this.status = status
-        },
-        togglePlay() {
-            this.setStatus(this.isStatus(Status.PLAYING) ? Status.PAUSED : Status.PLAYING)
+        setInitialStatus() {
+            this.pause()
+            this.status = Status.IDLE
+            this.currentTrack = null
+            this.currentTrackIndex = -1
         },
         next() {
-            this.playTrackByIndex(this.currentTrackIndex + 1)
+            this.loadTrack(this.currentTrackIndex + 1).then(() => this.play())
         },
         prev() {
-            this.playTrackByIndex(this.currentTrackIndex - 1)
+            this.loadTrack(this.currentTrackIndex - 1).then(() => this.play())
+        },
+        play() {
+            if (audioObj) {
+                audioObj.play()
+            }
+        },
+        pause() {
+            if (audioObj) {
+                audioObj.pause()
+            }
         },
         toggleMute() {
             this.muted = !this.muted
-        },
-        playTrackByIndex(index) {
-            this.setStatus(Status.LOADING)
-            const trackToPlay = this.tracks[index]
-            this.audioPlayer = null
-
-            if (trackToPlay) {
-                this.currentTrackIndex = index
-                this.currentTrack = trackToPlay
-
-                soundcloudSvc.streamTrack(trackToPlay.id)
-                    .then(player => {
-                        this.audioPlayer = player
-
-                        if (this.muted) {
-                            this.audioPlayer.setVolume(0)
-                        }
-
-                        this.audioPlayer.play()
-                            .then(() => this.setStatus(Status.PLAYING))
-                            .catch(e => this.setStatus(Status.ERROR))
-                    }).catch(e => {
-                        this.setStatus(Status.ERROR)
-                    })
-            } else {
-                throw new Error('Invalid track index: ' + index)
+            if (audioObj) {
+                audioObj.setVolume(this.muted ? 0 : 1)
             }
+        },
+        togglePlay() {
+            if (this.status === Status.PAUSED) {
+                this.play()
+            } else {
+                this.pause()
+            }
+        },
+        loadTrack(index) {
+            this.pause()
+
+            return new Promise((resolve, reject) => {
+                this.status = Status.LOADING
+
+                if (this.tracks[index]) {
+                    const trackToPlay = this.tracks[index]
+                    this.currentTrackIndex = index
+                    this.currentTrack = trackToPlay
+
+                    soundcloudSvc.streamTrack(trackToPlay.id)
+                        .then(player => {
+                            audioObj = player
+
+                            if (this.muted) {
+                                audioObj.setVolume(0)
+                            }
+
+                            audioObj.on('state-change', (state) => {
+                                switch(state) {
+                                    case 'paused':
+                                        this.status = Status.PAUSED
+                                        break
+                                    case 'playing':
+                                        this.status = Status.PLAYING
+                                        break
+                                    case 'loading':console.log(2222)
+                                        this.status = Status.LOADING
+                                        break
+                                    case 'ended':
+                                        this.status = Status.ENDED
+                                        this.next()
+                                        break
+                                    case 'error':
+                                    default:
+                                        this.status = Status.ERROR
+                                        break
+                                }
+                            })
+                            resolve()
+                        }).catch(e => {
+                            this.status = Status.ERROR
+                            reject(e)
+                        })
+                } else if (index > this.lastTrackIndex) {
+                    this.status = Status.ENDED
+                    reject('Finished playing tracks')
+                } else {
+                    this.status = Status.ERROR
+                    reject('Invalid track index ' + index)
+                }
+            })
         }
     }
 }
