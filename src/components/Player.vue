@@ -15,7 +15,9 @@
 <script>
 import soundcloudSvc from '../services/soundcloud.js'
 
-const Status = {
+let audioObj = null
+
+const State = {
     IDLE: 'idle',
     LOADING: 'loading',
     PLAYING: 'playing',
@@ -23,8 +25,6 @@ const Status = {
     ENDED: 'ended',
     ERROR: 'error'
 }
-
-let audioObj = null
 
 export default {
     name: 'player',
@@ -36,7 +36,7 @@ export default {
     },
     data() {
         return {
-            status: Status.IDLE,
+            state: State.IDLE,
             currentTrack: null,
             currentTrackIndex: -1,
             muted: false
@@ -47,27 +47,27 @@ export default {
             if (this.trackCount) {
                 this.loadTrack(0).then(() => this.play())
             } else {
-               this.setInitialStatus()
+               this.setInitialState()
             }
         }
     },
     computed: {
         playBtnText() {
-            return this.status === Status.PLAYING ? 'Pause' : 'Play'
+            return this.state === State.PLAYING ? 'Pause' : 'Play'
         },
         canPlayOrPause() {
-            return [Status.PLAYING, Status.PAUSED, Status.ENDED].includes(this.status)
+            return [State.PLAYING, State.PAUSED, State.ENDED].includes(this.state)
         },
         canRestart() {
-            return [Status.PLAYING].includes(this.status)
+            return [State.PLAYING].includes(this.state)
         },
         canGoToNext() {
             return (this.currentTrackIndex < this.lastTrackIndex) 
-                && [Status.PLAYING, Status.PAUSED, Status.ERROR].includes(this.status)
+                && [State.PLAYING, State.PAUSED, State.ERROR].includes(this.state)
         },
         canGoToPrev() {
             return (this.currentTrackIndex > 0) 
-                && [Status.PLAYING, Status.PAUSED, Status.ENDED, Status.ERROR].includes(this.status)
+                && [State.PLAYING, State.PAUSED, State.ENDED, State.ERROR].includes(this.state)
         },
         trackCount() {
             return this.tracks.length
@@ -77,9 +77,9 @@ export default {
         }
     },
     methods: {
-        setInitialStatus() {
+        setInitialState() {
             this.pause()
-            this.status = Status.IDLE
+            this.state = State.IDLE
             this.currentTrack = null
             this.currentTrackIndex = -1
         },
@@ -111,7 +111,7 @@ export default {
             } catch(e) {}
         },
         togglePlay() {
-            if (this.status === Status.PAUSED) {
+            if (this.state === State.PAUSED) {
                 this.play()
             } else {
                 this.pause()
@@ -121,7 +121,7 @@ export default {
             this.pause()
 
             return new Promise((resolve, reject) => {
-                this.status = Status.LOADING
+                this.state = State.LOADING
 
                 if (this.tracks[index]) {
                     const trackToPlay = this.tracks[index]
@@ -137,34 +137,34 @@ export default {
                             audioObj.on('state-change', (state) => {
                                 switch(state) {
                                     case 'paused':
-                                        this.status = Status.PAUSED
+                                        this.state = State.PAUSED
                                         break
                                     case 'playing':
-                                        this.status = Status.PLAYING
+                                        this.state = State.PLAYING
                                         break
                                     case 'loading':
-                                        this.status = Status.LOADING
+                                        this.state = State.LOADING
                                         break
                                     case 'ended':
-                                        this.status = Status.ENDED
+                                        this.state = State.ENDED
                                         this.next()
                                         break
                                     case 'error':
                                     default:
-                                        this.status = Status.ERROR
+                                        this.state = State.ERROR
                                         break
                                 }
                             })
                             resolve()
                         }).catch(e => {
-                            this.status = Status.ERROR
+                            this.state = State.ERROR
                             reject(e)
                         })
                 } else if (index > this.lastTrackIndex) {
-                    this.status = Status.ENDED
+                    this.state = State.ENDED
                     reject('Finished playing tracks')
                 } else {
-                    this.status = Status.ERROR
+                    this.state = State.ERROR
                     reject('Invalid track index ' + index)
                 }
             })
