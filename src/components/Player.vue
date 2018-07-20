@@ -1,9 +1,10 @@
 <template>
     <div class="player">
         <h2>Player</h2>
-        <button :disabled="!canGoToPrevTrack" @click="prev">Prev</button>
-        <button :disabled="!isPlayingOrPaused" @click="togglePlay">{{ playBtnText }}</button>
-        <button :disabled="!canGoToNextTrack" @click="next">Next</button>
+        <button :disabled="!canGoToPrev" @click="prev">Prev</button>
+        <button :disabled="!canPlayOrPause" @click="togglePlay">{{ playBtnText }}</button>
+        <button :disabled="!canGoToNext" @click="next">Next</button>
+        <button :disabled="!canRestart" @click="restart">Restart</button>
         <button @click="toggleMute">{{ muted ? 'Unmute' : 'Mute' }}</button>
         <ul>
             <li v-for="track in tracks" :key="track.id">{{ track.title }}</li>
@@ -54,14 +55,17 @@ export default {
         playBtnText() {
             return this.status === Status.PLAYING ? 'Pause' : 'Play'
         },
-        isPlayingOrPaused() {
-            return [Status.PLAYING, Status.PAUSED].includes(this.status)
+        canPlayOrPause() {
+            return [Status.PLAYING, Status.PAUSED, Status.ENDED].includes(this.status)
         },
-        canGoToNextTrack() {
+        canRestart() {
+            return [Status.PLAYING].includes(this.status)
+        },
+        canGoToNext() {
             return (this.currentTrackIndex < this.lastTrackIndex) 
                 && [Status.PLAYING, Status.PAUSED, Status.ERROR].includes(this.status)
         },
-        canGoToPrevTrack() {
+        canGoToPrev() {
             return (this.currentTrackIndex > 0) 
                 && [Status.PLAYING, Status.PAUSED, Status.ENDED, Status.ERROR].includes(this.status)
         },
@@ -86,20 +90,25 @@ export default {
             this.loadTrack(this.currentTrackIndex - 1).then(() => this.play())
         },
         play() {
-            if (audioObj) {
+            try {
                 audioObj.play()
-            }
+            } catch(e) {}
         },
         pause() {
-            if (audioObj) {
+            try {
                 audioObj.pause()
-            }
+            } catch(e) {}
+        },
+        restart() {
+            try {
+                audioObj.seek(0)
+            } catch(e) {}
         },
         toggleMute() {
             this.muted = !this.muted
-            if (audioObj) {
+            try {
                 audioObj.setVolume(this.muted ? 0 : 1)
-            }
+            } catch(e) {}
         },
         togglePlay() {
             if (this.status === Status.PAUSED) {
@@ -122,11 +131,9 @@ export default {
                     soundcloudSvc.streamTrack(trackToPlay.id)
                         .then(player => {
                             audioObj = player
-
                             if (this.muted) {
                                 audioObj.setVolume(0)
                             }
-
                             audioObj.on('state-change', (state) => {
                                 switch(state) {
                                     case 'paused':
@@ -135,7 +142,7 @@ export default {
                                     case 'playing':
                                         this.status = Status.PLAYING
                                         break
-                                    case 'loading':console.log(2222)
+                                    case 'loading':
                                         this.status = Status.LOADING
                                         break
                                     case 'ended':
