@@ -1,11 +1,11 @@
 <template>
     <div class="player">
         <h2>Player</h2>
-        <button :disabled="!canGoToPrev" @click="prev">Prev</button>
-        <button :disabled="!canPlayOrPause" @click="togglePlay">{{ playBtnText }}</button>
-        <button :disabled="!canGoToNext" @click="next">Next</button>
-        <button :disabled="!canRestart" @click="restart">Restart</button>
-        <button @click="toggleMute">{{ muted ? 'Unmute' : 'Mute' }}</button>
+        <button :disabled="!canSkipToPrev" @click="prev" title="Skip to previous"><i class="fas fa-backward"></i></button>
+        <button :disabled="!canPlayOrPause" @click="togglePlay" :title="[isPlaying ? 'Pause' : 'Play']" ><i :class="[isPlaying ? 'fas fa-pause' : 'fas fa-play']"></i></button>
+        <button :disabled="!canSkipToNext" @click="next" title="Skip to next"><i class="fas fa-forward"></i></button>
+        <button :disabled="!canRestart" @click="restart" title="Restart current"><i class="fas fa-redo"></i></button>
+        <button @click="toggleMute" :title="[muted ? 'Unmute' : 'Mute']"><i :class="[muted ? 'fas fa-volume-off' : 'fas fa-volume-up']"></i></button>
         <ul>
             <li v-for="track in tracks" :key="track.id">{{ track.title }}</li>
         </ul>
@@ -52,8 +52,8 @@ export default {
         }
     },
     computed: {
-        playBtnText() {
-            return this.state === State.PLAYING ? 'Pause' : 'Play'
+        isPlaying() {
+            return this.state === State.PLAYING
         },
         canPlayOrPause() {
             return [State.PLAYING, State.PAUSED, State.ENDED].includes(this.state)
@@ -61,11 +61,11 @@ export default {
         canRestart() {
             return [State.PLAYING].includes(this.state)
         },
-        canGoToNext() {
+        canSkipToNext() {
             return (this.currentTrackIndex < this.lastTrackIndex) 
                 && [State.PLAYING, State.PAUSED, State.ERROR].includes(this.state)
         },
-        canGoToPrev() {
+        canSkipToPrev() {
             return (this.currentTrackIndex > 0) 
                 && [State.PLAYING, State.PAUSED, State.ENDED, State.ERROR].includes(this.state)
         },
@@ -119,12 +119,12 @@ export default {
         },
         loadTrack(index) {
             this.pause()
+            this.state = State.LOADING
 
             return new Promise((resolve, reject) => {
-                this.state = State.LOADING
+                const trackToPlay = this.tracks[index]
 
-                if (this.tracks[index]) {
-                    const trackToPlay = this.tracks[index]
+                if (trackToPlay) {
                     this.currentTrackIndex = index
                     this.currentTrack = trackToPlay
 
