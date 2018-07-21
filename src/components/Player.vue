@@ -1,10 +1,10 @@
 <template>
     <div class="player">
         <h2>Player</h2>
-        <button :disabled="!canSkipToPrev" @click="prev" title="Skip to previous"><i class="fas fa-backward"></i></button>
+        <button :disabled="!canSkipToPrev" @click="prev" title="Skip to previous"><i class="fas fa-step-backward"></i></button>
         <button :disabled="!canPlayOrPause" @click="togglePlay" :title="[isPlaying ? 'Pause' : 'Play']" ><i :class="[isPlaying ? 'fas fa-pause' : 'fas fa-play']"></i></button>
-        <button :disabled="!canSkipToNext" @click="next" title="Skip to next"><i class="fas fa-forward"></i></button>
-        <button :disabled="!canRestart" @click="restart" title="Restart current"><i class="fas fa-redo"></i></button>
+        <button :disabled="!canSkipToNext" @click="next" title="Skip to next"><i class="fas fa-step-forward"></i></button>
+        <button :disabled="!canRestart" @click="restart" title="Restart track"><i class="fas fa-redo"></i></button>
         <button @click="toggleMute" :title="[muted ? 'Unmute' : 'Mute']"><i :class="[muted ? 'fas fa-volume-off' : 'fas fa-volume-up']"></i></button>
         <ul>
             <li v-for="track in tracks" :key="track.id">{{ track.title }}</li>
