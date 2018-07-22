@@ -6,7 +6,6 @@
         </form>
     </div>
 </template>
-
 <script>
     export default {
         name: 'stations-search-form',

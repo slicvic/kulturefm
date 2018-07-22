@@ -7,7 +7,6 @@
         </ul>
     </div>
 </template>
-
 <script>
     export default {
         name: 'stations-list',
