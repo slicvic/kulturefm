@@ -1,8 +1,8 @@
 <template>
     <div class="stations-container">
         <h2>Stations</h2>
-        <stations-search-form @submit="handleSearchFormSubmit"></stations-search-form>
-        <stations-list :stations="stations" @item-click="handleStationSelect"></stations-list>
+        <stations-search-form @submit="handleSearchSubmit"></stations-search-form>
+        <stations-list :stations="stations" @item-select="handleStationSelect"></stations-list>
     </div>
 </template>
 
@@ -26,8 +26,24 @@
             StationsSearchForm
         },
         methods: {
-            handleSearchFormSubmit(values) {
-                console.log(values)
+            handleSearchSubmit(values) {
+                if (values.searchTerm) {
+                    soundcloudSvc.findTracks({
+                        q: values.searchTerm,
+                        successCallback: tracks => {
+                            if (tracks.length) {
+                              const station = {
+                                  name: values.searchTerm,
+                                  keywords: [],
+                                  tracks: tracks
+                              }
+                              this.$store.dispatch('setStation', station)
+                            } else {
+                                alert(`Couldn't find any tracks. Please try again.`)
+                            }
+                        }
+                    })
+                }
             },
             handleStationSelect(station) {
                 soundcloudSvc.findTracks({
@@ -38,7 +54,7 @@
                             stationWithTracks.tracks = tracks
                             this.$store.dispatch('setStation', stationWithTracks)
                         } else {
-                            alert('Sorry, no tracks found.')
+                            alert('Playback error. Please try again.')
                         }
                     }
                 })

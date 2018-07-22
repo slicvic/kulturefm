@@ -1,8 +1,8 @@
 <template>
     <div class="stations-search-form">
         <form>
-            <input type="text" v-model="searchTerm">
-            <button @click.prevent="handleSearchButtonClick">Play</button>
+            <input type="text" placeholder="Artist, Genre, Song" v-model="searchTerm" @keyup.enter.prevent="submitForm">
+            <button @click.prevent="submitForm">Play</button>
         </form>
     </div>
 </template>
@@ -16,7 +16,7 @@
             }
         },
         methods: {
-            handleSearchButtonClick(v) {
+            submitForm() {
                 this.$emit('submit', {searchTerm: this.searchTerm})
             }
         }
