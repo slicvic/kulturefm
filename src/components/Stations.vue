@@ -3,7 +3,7 @@
         <h2>Stations</h2>
         <ul>
             <li v-for="station in stations" :key="station.name">
-                <a href="#" @click.prevent="$emit('station-click', station)">{{ station.title }}</a>
+                <a href="#" @click.prevent="handleStationClick(station)">{{ station.name }}</a>
             </li>
         </ul>
     </div>
@@ -16,6 +16,11 @@
             stations: {
                 type: Array,
                 default: []
+            }
+        },
+        methods: {
+            handleStationClick(station) {
+                this.$emit('station-click', station)
             }
         }
     }

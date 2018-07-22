@@ -6,6 +6,7 @@
 
 <script>
     import Stations from './Stations.vue'
+    import soundcloudSvc from '../services/soundcloud.js'
 
     export default {
         name: 'stations-container',
@@ -22,7 +23,17 @@
         },
         methods: {
             handleStationClick(station) {
-                this.$store.dispatch('setStation', station)
+                soundcloudSvc.findTracks({
+                    tags: station.keywords.join(','),
+                    successCallback: tracks => {
+                        if (tracks.length) {
+                            this.$store.dispatch('setTracks', tracks)
+                            this.$store.dispatch('setStation', station)
+                        } else {
+                            alert('Sorry, no tracks found.')
+                        }
+                    }
+                })
             }
         }
     }
