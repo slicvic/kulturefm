@@ -2,7 +2,7 @@
     <div class="stations-container">
         <h2>Stations</h2>
         <stations-search-form @submit="handleSearchSubmit"></stations-search-form>
-        <stations-list :stations="stations" @item-select="handleStationSelect"></stations-list>
+        <stations-list :stations="stations" @item-click="handleStationClick"></stations-list>
     </div>
 </template>
 
@@ -45,7 +45,7 @@
                     })
                 }
             },
-            handleStationSelect(station) {
+            handleStationClick(station) {
                 soundcloudSvc.findTracks({
                     tags: station.keywords.join(','),
                     successCallback: tracks => {
