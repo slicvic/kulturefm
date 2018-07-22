@@ -4,24 +4,28 @@ const StationType = {
 
 const stations = [
     {
-        name: 'Hip-Hop/Rap/Trap',
-        keywords: ['hip-hop', 'hip hop', 'hiphop', 'rap', 'trap']
+        name: 'Hip-Hop/Rap',
+        keywords: ['hip-hop', 'hip hop', 'hiphop', 'rap']
+    },
+    {
+        name: 'Christian/Gospel',
+        keywords: ['christian', 'gospel']
+    },
+    {
+        name: 'Trap',
+        keywords: ['trap']
     },
     {
         name: 'Country',
         keywords: ['country', 'country music']
     },
     {
-        name: 'Dance',
-        keywords: ['dance']
+        name: 'Dance/Electronic',
+        keywords: ['dance', 'electronic', 'edm']
     },
     {
-        name: 'Electronic',
-        keywords: ['electronic', 'edm']
-    },
-    {
-        name: 'Indie',
-        keywords: ['indie', 'indie rock']
+        name: 'Alternative/Indie',
+        keywords: ['indie', 'indie rock', 'alternative']
     },
     {
         name: 'Jazz',
@@ -32,12 +36,17 @@ const stations = [
         keywords: ['k-pop']
     },
     {
-        name: 'Latino',
-        keywords: ['latino', 'salsa', 'merengue', 'bachata', 'reggaeton'],
+        name: 'Latin Tropical',
+        description: 'Salsa, Merengue, Bachata',
+        keywords: ['salsa', 'merengue', 'bachata']
     },
     {
-        name: 'R&B',
-        keywords: ['r&b', 'rhythm and blues']
+        name: 'Reggaeton',
+        keywords: ['reggaeton']
+    },
+    {
+        name: 'R&B/Soul',
+        keywords: ['r&b', 'rhythm and blues', 'soul']
     },
     {
         name: 'Pop',
