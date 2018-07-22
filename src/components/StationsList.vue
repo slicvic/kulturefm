@@ -1,9 +1,8 @@
 <template>
-    <div class="stations">
-        <h2>Stations</h2>
+    <div class="stations-list">
         <ul>
             <li v-for="station in stations" :key="station.name">
-                <a href="#" @click.prevent="handleStationClick(station)">{{ station.name }}</a>
+                <a href="#" @click.prevent="handleItemClick(station)">{{ station.name }}</a>
             </li>
         </ul>
     </div>
@@ -11,7 +10,7 @@
 
 <script>
     export default {
-        name: 'stations',
+        name: 'stations-list',
         props: {
             stations: {
                 type: Array,
@@ -19,8 +18,8 @@
             }
         },
         methods: {
-            handleStationClick(station) {
-                this.$emit('station-click', station)
+            handleItemClick(station) {
+                this.$emit('item-click', station)
             }
         }
     }

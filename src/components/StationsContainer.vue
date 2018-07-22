@@ -1,11 +1,14 @@
 <template>
     <div class="stations-container">
-        <stations :stations="stations" @station-click="handleStationClick"></stations>
+        <h2>Stations</h2>
+        <stations-search-form @submit="handleSearchFormSubmit"></stations-search-form>
+        <stations-list :stations="stations" @item-click="handleStationSelect"></stations-list>
     </div>
 </template>
 
 <script>
-    import Stations from './Stations.vue'
+    import StationsSearchForm from './StationsSearchForm.vue'
+    import StationsList from './StationsList.vue'
     import soundcloudSvc from '../services/soundcloud.js'
 
     export default {
@@ -19,10 +22,14 @@
             }
         },
         components: {
-            Stations
+            StationsList,
+            StationsSearchForm
         },
         methods: {
-            handleStationClick(station) {
+            handleSearchFormSubmit(values) {
+                console.log(values)
+            },
+            handleStationSelect(station) {
                 soundcloudSvc.findTracks({
                     tags: station.keywords.join(','),
                     successCallback: tracks => {
