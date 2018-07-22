@@ -27,8 +27,9 @@
                     tags: station.keywords.join(','),
                     successCallback: tracks => {
                         if (tracks.length) {
-                            this.$store.dispatch('setTracks', tracks)
-                            this.$store.dispatch('setStation', station)
+                            const stationWithTracks = Object.assign({}, station)
+                            stationWithTracks.tracks = tracks
+                            this.$store.dispatch('setStation', stationWithTracks)
                         } else {
                             alert('Sorry, no tracks found.')
                         }
