@@ -1,6 +1,5 @@
 <template>
     <div class="app">
-        <h1>VueRadio</h1>
         <stations-container></stations-container>
         <player-container></player-container>
     </div>
@@ -17,5 +16,4 @@
             PlayerContainer
         }
     }
-    
 </script>

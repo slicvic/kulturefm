@@ -6,6 +6,7 @@
         <button :disabled="!canRestart" @click="restart" class="btn btn-secondary" title="Restart track"><i class="fas fa-fw fa-redo"></i></button>
         <button @click="toggleMute" class="btn btn-secondary" :title="[muted ? 'Unmute' : 'Mute']"><i :class="[muted ? 'fas fa-fw fa-volume-off' : 'fas fa-fw fa-volume-up']"></i></button>
         <span>{{ currentTrack ? currentTrack.title : '' }}</span>
+        <span v-show="trackCount > 0">{{ currentTrackNumber }} / {{ trackCount }}</span>
     </div>
 </template>
 
@@ -66,6 +67,9 @@ export default {
             return (this.currentTrackIndex > 0) 
                 && [State.PLAYING, State.PAUSED, State.FINISHED, State.ERROR].includes(this.state)
         },
+        currentTrackNumber() {
+            return this.currentTrackIndex + 1
+        },
         trackCount() {
             return this.tracks.length
         },
@@ -120,7 +124,7 @@ export default {
 
             return new Promise((resolve, reject) => {
                 const trackToPlay = this.tracks[index]
-
+console.log(trackToPlay)
                 if (trackToPlay) {
                     this.currentTrackIndex = index
                     this.currentTrack = trackToPlay
