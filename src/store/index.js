@@ -9,6 +9,15 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         stations: stationSvc.getStations(),
+        /**
+         * @type null|Object In the form of:
+         * 
+         * {
+         *      name: '',
+         *      keywords: [],
+         *      tracks: []
+         * }
+         */
         currentStation: null
     },
     getters: {
