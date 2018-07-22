@@ -5,6 +5,7 @@
         <stations-list :stations="stations" @item-select="handleStationSelect"></stations-list>
     </div>
 </template>
+
 <script>
     import StationsSearchForm from './StationsSearchForm.vue'
     import StationsList from './StationsList.vue'
