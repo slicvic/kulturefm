@@ -1,6 +1,9 @@
 <template>
     <div class="app">
-        <stations-container></stations-container>
+        <div class="container">
+            <h1>VueRadio</h1>
+            <stations-container></stations-container>
+        </div>
         <player-container></player-container>
     </div>
 </template>

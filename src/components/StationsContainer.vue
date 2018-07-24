@@ -1,8 +1,8 @@
 <template>
     <div class="stations-container">
         <h2>Stations</h2>
-        <stations-search-form @submit="handleSearchSubmit"></stations-search-form>
-        <stations-list :stations="stations" @item-click="handleStationClick"></stations-list>
+        <stations-search-form @submit="onSearchSubmit"></stations-search-form>
+        <stations-list :stations="stations" @item-click="onStationSelect"></stations-list>
     </div>
 </template>
 
@@ -26,7 +26,7 @@
             StationsSearchForm
         },
         methods: {
-            handleSearchSubmit(values) {
+            onSearchSubmit(values) {
                 if (values.searchTerm) {
                     soundcloudSvc.findTracks({
                         q: values.searchTerm,
@@ -45,7 +45,7 @@
                     })
                 }
             },
-            handleStationClick(station) {
+            onStationSelect(station) {
                 soundcloudSvc.findTracks({
                     tags: station.keywords.join(','),
                     successCallback: tracks => {

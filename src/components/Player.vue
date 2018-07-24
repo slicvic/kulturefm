@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="track-info media" v-if="currentTrack">
+                    <div class="player__track-info media" v-if="currentTrack">
                         <img class="mr-3 img-thumbnail" :src="currentTrack.artwork_url">
                         <div class="media-body align-self-center">
                             <h6 class="mt-0">{{ currentTrack.title }}</h6>
@@ -11,13 +11,13 @@
                     </div>
                 </div>
                 <div class="col-md-4 text-center">
-                    <button :disabled="!canSkipToPrev" @click="prev" class="player-control btn btn-link" title="Skip to previous"><i class="fas fa-fw fa-step-backward"></i></button>
-                    <button :disabled="!canPlayOrPause" @click="togglePlay" class="player-control player-control-play btn btn-link" :title="[isPlaying ? 'Pause' : 'Play']" ><i :class="[isPlaying ? 'fas fa-fw fa-pause-circle' : 'fas fa-fw fa-play-circle']"></i></button>
-                    <button :disabled="!canSkipToNext" @click="next" class="player-control btn btn-link" title="Skip to next"><i class="fas fa-fw fa-step-forward"></i></button>
+                    <button :disabled="!canSkipToPrev" @click="prev" class="player__control btn btn-link" title="Skip to previous"><i class="fas fa-fw fa-step-backward"></i></button>
+                    <button :disabled="!canPlayOrPause" @click="togglePlay" class="player__control player__control--play btn btn-link" :title="[isPlaying ? 'Pause' : 'Play']" ><i :class="[isPlaying ? 'fas fa-fw fa-pause-circle' : 'fas fa-fw fa-play-circle']"></i></button>
+                    <button :disabled="!canSkipToNext" @click="next" class="player__control btn btn-link" title="Skip to next"><i class="fas fa-fw fa-step-forward"></i></button>
                 </div>
                 <div class="col-md-4 text-center text-md-right align-self-center">
-                    <button :disabled="!canRestart" @click="restart" class="player-control btn btn-link" title="Restart track"><i class="fas fa-fw fa-redo-alt"></i></button>
-                    <button @click="toggleMute" class="player-control btn btn-link" :title="[muted ? 'Unmute' : 'Mute']"><i :class="[muted ? 'fas fa-fw fa-volume-off' : 'fas fa-fw fa-volume-up']"></i></button>
+                    <button :disabled="!canRestart" @click="restart" class="player__control btn btn-link" title="Restart track"><i class="fas fa-fw fa-redo-alt"></i></button>
+                    <button @click="toggleMute" class="player__control btn btn-link" :title="[muted ? 'Unmute' : 'Mute']"><i :class="[muted ? 'fas fa-fw fa-volume-off' : 'fas fa-fw fa-volume-up']"></i></button>
                 </div>
             </div>
         </div>
@@ -26,11 +26,11 @@
 </template>
 
 <style>
-    .player-control-play {
+    .player__control--play {
         font-size: 3rem;
     }
 
-    .player .track-info img {
+    .player__track-info img {
         width: 86px;
         height: 86px;
     }
