@@ -9,14 +9,15 @@ export default {
         return SC.stream('/tracks/' + trackId)
     },
     findTracks({
-        q = null, 
-        tags = null, 
-        genres = null, 
-        successCallback = () => {}, 
-        failureCallback = () => {}
+        q = '', 
+        tags = '', 
+        genres = '', 
+        limit = 10,
+        streamable = true
     }) {
         const params = {
-            limit: 200
+            limit,
+            streamable
         }
 
         if (q) {
@@ -31,8 +32,14 @@ export default {
             params.genres = genres
         }
 
-        return SC.get('/tracks', params)
-            .then(tracks => successCallback(tracks.filter(t => t.streamable == true)))
-            .catch(failureCallback)
+        return new Promise((resolve, reject) => {
+            return SC.get('/tracks', params)
+                .then(tracks => {
+                    console.log('tracks', tracks)
+                    console.log('tracks filtered', tracks.filter(t => t.streamable == streamable))
+                    resolve(tracks.filter(t => t.streamable == streamable))
+                })
+                .catch(e => reject(e))
+        })
     }
 }

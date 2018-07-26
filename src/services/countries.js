@@ -16,7 +16,7 @@ const data = [
 ]
 
 const random = function() {
-    return _.sample(data)
+    return _.sample(_.shuffle(data))
 }
 
 const randomNotEqualTo = function(country) {

@@ -120,10 +120,11 @@ export default {
     methods: {
         next() {
             this.state = State.LOADING
-            
             searchSvc.findRandomTrackFrom(this.$store.state.nextDestination)
                 .then(response => this.$store.dispatch('addAndPlayTrack', response.track))
-                .catch(e => { throw new Error(e )})
+                .catch(e => { 
+                    throw new Error(e)
+                })
         },
         prev() {
             this.$store.dispatch('playPrevTrack')
@@ -150,7 +151,6 @@ export default {
             }
             return new Promise((resolve, reject) => {
                 const trackToPlay = this.tracks[index]
-
                 soundcloudSvc.streamTrack(trackToPlay.id)
                     .then(player => {
                         this.audioObject = player
