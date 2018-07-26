@@ -45,7 +45,7 @@
                         this.showWelcomeScreen = false
                     })
                     .catch(e => { 
-                        throw new Error(e)
+                        throw Error(e)
                     })
                 
             }
