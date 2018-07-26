@@ -1,10 +1,10 @@
 <template>
     <div class="player">
-        <div class="container-fluid">
+        <div class="player_inner container-fluid">
             <div class="row">
                 <div class="col-md-4">
                     <div class="player__track-info media" v-if="currentTrack">
-                        <img class="mr-3 img-thumbnail" :src="currentTrack.artwork_url">
+                        <img class="mr-3" :src="currentTrack.artwork_url">
                         <div class="media-body align-self-center">
                             <h6 class="mt-0">{{ currentTrack.title }}</h6>
                         </div>
@@ -54,6 +54,10 @@
 </template>
 
 <style>
+    .player_inner {
+        padding-left: 0;
+    }
+    
     .player__control--play {
         font-size: 3rem;
     }

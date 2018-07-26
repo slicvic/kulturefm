@@ -1,7 +1,7 @@
 <template>
     <div class="welcome d-flex justify-content-center">
         <div class="align-self-center">
-            <h1>KultureFM</h1>
+            <h1>Kulture.fm</h1>
             <button
                 class="welcome__start-btn btn btn-link"
                 title="Start culturalizing"

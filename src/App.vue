@@ -2,7 +2,7 @@
     <div class="app">
         <welcome v-if="showWelcomeScreen" :loading="showWelcomeScreenLoading" @start-click="onStartClick"></welcome>
         <div class="container">
-            <h1>KultureFM</h1>
+            <h1>Kulture.fm</h1>
         </div>
         <div class="player-container">
             <player></player>
