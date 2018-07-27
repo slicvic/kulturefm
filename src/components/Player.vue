@@ -1,6 +1,6 @@
 <template>
     <div class="player">
-        <div class="player_inner container-fluid">
+        <div class="player__inner container-fluid">
             <div class="row">
                 <div class="col-md-4">
                     <div class="player__track-info media" v-if="currentTrack">
@@ -16,37 +16,40 @@
                         title="Revisit previous location"
                         :disabled="!canSkipToPrev"
                         @click="prev">
-                        <i class="fas fa-fw fa-step-backward"></i>
+                        <i class="fa fa-fw fa-step-backward"></i>
                     </button>
                     <button
                         class="player__control player__control--play btn btn-link"
                         :disabled="!canPlayOrPause"
                         :title="[isPlaying ? 'Pause' : 'Play']"
                         @click="togglePlay">
-                        <i :class="[isPlaying ? 'fas fa-fw fa-pause-circle' : 'fas fa-fw fa-play-circle']"></i>
+                        <i :class="['fa-3x', isPlaying ? 'fa fa-fw fa-pause-circle' : 'fa fa-fw fa-play-circle']"></i>
                     </button>
                     <button
                         class="player__control btn btn-link"
                         title="Skip to next destination"
                         :disabled="!canSkipToNext"
                         @click="next">
-                        <i class="fas fa-fw fa-step-forward"></i>
+                        <i class="fa fa-fw fa-step-forward"></i>
                     </button>
                 </div>
-                <div class="col-md-4 text-center text-md-right align-self-center">
+                <div class="col-md-4 text-right align-self-center">
                     <button
                         class="player__control btn btn-link"
                         title="Restart track"
                         :disabled="!canRestart"
                         @click="restart">
-                        <i class="fas fa-fw fa-redo-alt"></i>
+                        <i class="fa fa-fw fa-redo-alt"></i>
                     </button>
                     <button
                         class="player__control btn btn-link"
                         :title="[muted ? 'Unmute' : 'Mute']"
                         @click="toggleMute">
-                        <i :class="[muted ? 'fas fa-fw fa-volume-off' : 'fas fa-fw fa-volume-up']"></i>
+                        <i :class="[muted ? 'fa fa-fw fa-volume-off' : 'fa fa-fw fa-volume-up']"></i>
                     </button>
+                    <span v-if="nextDestination">
+                        <span class="font-weight-light">Next stop</span> <i class="fa fa-map-marker-alt"></i> <strong>{{ nextDestination.name }}</strong>
+                    </span>
                 </div>
             </div>
         </div>
@@ -54,17 +57,19 @@
 </template>
 
 <style>
-    .player_inner {
+    .player {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 60px;
+        background-color: #f5f5f5;
+    }
+    .player__inner {
         padding-left: 0;
     }
-    
-    .player__control--play {
-        font-size: 3rem;
-    }
-
     .player__track-info img {
-        width: 86px;
-        height: 86px;
+        width: 60px;
+        height: 60px;
     }
 </style>
 
@@ -72,6 +77,9 @@
 import searchSvc from '../services/search.js'
 import soundcloudSvc from '../services/soundcloud.js'
 
+/**
+ * Internal states.
+ */
 const State = {
     IDLE: 'idle',
     LOADING: 'loading',
@@ -82,12 +90,12 @@ const State = {
 }
 
 export default {
-    name: 'player',
+    name: 'player-component',
     data() {
         return {
             state: State.IDLE,
             muted: false,
-            audioObject: null
+            audioObj: null
         }
     },
     watch: {
@@ -96,8 +104,8 @@ export default {
         }
     },
     computed: {
-        tracks() {
-            return this.$store.state.tracks
+        playlist() {
+            return this.$store.state.playlist
         },
         currentTrack() {
             return this.$store.getters.currentTrack
@@ -119,49 +127,52 @@ export default {
         },
         canSkipToPrev() {
             return this.currentTrackIndex > 0
+        },
+        nextDestination() {
+            return this.$store.state.nextDestination
         }
     },
     methods: {
         next() {
             this.state = State.LOADING
             searchSvc.findRandomTrackFrom(this.$store.state.nextDestination)
-                .then(response => this.$store.dispatch('addAndPlayTrack', response.track))
+                .then(response => this.$store.dispatch('playTrack', response.track))
                 .catch(e => { 
-                    throw new Error(e)
+                    throw Error(e)
                 })
         },
         prev() {
             this.$store.dispatch('playPrevTrack')
         },
         play() {
-            this.audioObject.play()
+            this.audioObj.play()
         },
         pause() {
-            this.audioObject.pause()
+            this.audioObj.pause()
         },
         restart() {
-            this.audioObject.seek(0)
+            this.audioObj.seek(0)
         },
         toggleMute() {
             this.muted = !this.muted
-            this.audioObject.setVolume(this.muted ? 0 : 1)
+            this.audioObj.setVolume(this.muted ? 0 : 1)
         },
         togglePlay() {
             (this.state === State.PAUSED) ? this.play() : this.pause()
         },
         loadTrack(index) {
-            if (this.audioObject) {
-                this.audioObject.kill()
+            if (this.audioObj) {
+                this.audioObj.kill()
             }
             return new Promise((resolve, reject) => {
-                const trackToPlay = this.tracks[index]
+                const trackToPlay = this.playlist[index]
                 soundcloudSvc.streamTrack(trackToPlay.id)
                     .then(player => {
-                        this.audioObject = player
+                        this.audioObj = player
                         if (this.muted) {
-                            this.audioObject.setVolume(0)
+                            this.audioObj.setVolume(0)
                         }
-                        this.audioObject.on('state-change', (state) => {
+                        this.audioObj.on('state-change', (state) => {
                             switch(state) {
                                 case 'paused':
                                     this.state = State.PAUSED

@@ -6,36 +6,29 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        tracks: [],
+        playlist: [],
         currentTrackIndex: -1,
         nextDestination: null
     },
     getters: {
         currentTrack(state) {
-            return state.tracks[state.currentTrackIndex]
+            return state.playlist[state.currentTrackIndex]
         },
         currentLocation(state, getters) {
             return getters.currentTrack ? getters.currentTrack.country : null
         }
     },
     mutations: {
-        addAndPlayTrack(state, track) {
-            state.tracks.push(track)
-            state.currentTrackIndex = state.tracks.length - 1
-        },
-        playTrackByIndex(state, index) {
-            if (index >= 0 && index <= state.tracks.length - 1) {
-                state.currentTrackIndex = index
-            } else {
-                throw new Error('Invalid track index ' + index)
-            }
+        playTrack(state, track) {
+            state.playlist.push(track)
+            state.currentTrackIndex = state.playlist.length - 1
         },
         playPrevTrack(state) {
             const prevIndex = state.currentTrackIndex - 1
-            if (prevIndex >= 0 && prevIndex <= state.tracks.length - 1) {
+            if (state.playlist[prevIndex]) {
                 state.currentTrackIndex = prevIndex
             } else {
-                throw new Error('Invalid track index ' + prevIndex)
+                throw Error('Invalid track index ' + prevIndex)
             }
         },
         setNextDestination(state, country) {
@@ -43,8 +36,8 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        addAndPlayTrack(context, track) {
-            context.commit('addAndPlayTrack', track)
+        playTrack(context, track) {
+            context.commit('playTrack', track)
             context.commit('setNextDestination', countriesSvc.randomNotEqualTo(track.country))
         },
         playPrevTrack(context) {

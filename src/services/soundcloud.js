@@ -35,8 +35,6 @@ export default {
         return new Promise((resolve, reject) => {
             return SC.get('/tracks', params)
                 .then(tracks => {
-                    console.log('tracks', tracks)
-                    console.log('tracks filtered', tracks.filter(t => t.streamable == streamable))
                     resolve(tracks.filter(t => t.streamable == streamable))
                 })
                 .catch(e => reject(e))

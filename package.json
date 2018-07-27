@@ -26,6 +26,7 @@
         "@fortawesome/fontawesome-free": "^5.1.1",
         "bootstrap": "^4.1.2",
         "lodash": "^4.17.10",
+        "ol": "^5.1.3",
         "vue": "^2.5.16",
         "vuex": "^3.0.1"
     }

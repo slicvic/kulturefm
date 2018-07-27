@@ -9,7 +9,7 @@
                 @click="onStartClick">
                 <i class="fas fa-fw fa-play-circle"></i>
             </button>
-            <i v-if="loading" class="welcome__spinner fa fa-spinner fa-spin"></i> 
+            <i v-if="loading" class="welcome__loading fas fa-spinner fa-spin"></i> 
         </div>
     </div>
 </template>
@@ -17,26 +17,24 @@
 <style>
     .welcome {
         position: absolute;
+        z-index: 3000;
         width: 100%;
         height: 100%;
         background: #000;
-        z-index: 1000;
         color: #fff;
         text-align: center;
     }
-
     .welcome__start-btn {
         font-size: 6rem;
     }
-
-    .welcome__spinner {
+    .welcome__loading {
         font-size: 6rem;  
     }
 </style>
 
 <script>
 export default {
-    name: 'welcome',
+    name: 'welcome-component',
     props: {
         loading: {
             type: Boolean,
