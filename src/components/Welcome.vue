@@ -7,9 +7,9 @@
                 title="Start culturalizing"
                 v-if="!loading"
                 @click="onStartClick">
-                <i class="fas fa-fw fa-play-circle"></i>
+                <i class="fa fa-fw fa-play-circle"></i>
             </button>
-            <i v-if="loading" class="welcome__loading fas fa-spinner fa-spin"></i> 
+            <i v-if="loading" class="welcome__loading fa fa-spinner fa-spin"></i> 
         </div>
     </div>
 </template>

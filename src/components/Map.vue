@@ -2,7 +2,7 @@
     <div class="map">
         <div class="map__canvas" id="map-canvas"></div>
         <div class="map__popup" id="map-popup">
-            <!--<div>{{ currentLocation.name }}</div>-->
+            <div>{{ currentLocation.name }}</div>
         </div>
     </div>
 </template>
@@ -56,7 +56,6 @@ import View from 'ol/View.js'
 import TileLayer from 'ol/layer/Tile.js'
 import {fromLonLat} from 'ol/proj.js'
 import OSM from 'ol/source/OSM.js'
-import {toStringXY} from 'ol/coordinate'
 import Overlay from 'ol/Overlay.js'
 
 export default {

@@ -98,11 +98,6 @@ export default {
             audioObj: null
         }
     },
-    watch: {
-        currentTrackIndex(index) {
-            this.loadTrack(index).then(() => this.play())
-        }
-    },
     computed: {
         playlist() {
             return this.$store.state.playlist
@@ -130,6 +125,11 @@ export default {
         },
         nextDestination() {
             return this.$store.state.nextDestination
+        }
+    },
+    watch: {
+        currentTrackIndex(index) {
+            this.loadTrack(index).then(() => this.play())
         }
     },
     methods: {

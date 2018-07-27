@@ -28,7 +28,6 @@
         methods: {
             onStartClick() {
                 this.welcomeScreenLoading = true
-
                 searchSvc.findRandomTrack()
                     .then(response => {
                         this.$store.dispatch('playTrack', response.track)
