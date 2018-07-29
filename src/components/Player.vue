@@ -48,7 +48,7 @@
                         <i :class="[muted ? 'fa fa-fw fa-volume-off' : 'fa fa-fw fa-volume-up']"></i>
                     </button>
                     <span v-if="nextDestination">
-                        <span class="font-weight-light">Next stop</span> <i class="fa fa-map-marker-alt"></i> <strong>{{ nextDestination.name }}</strong>
+                        <span class="font-weight-light">Next stop</span> <i class="fa fa-map-marker-alt"></i> <strong>{{ nextDestination.details.name }}</strong>
                     </span>
                 </div>
             </div>
@@ -128,9 +128,11 @@ export default {
     },
     watch: {
         currentTrack(track) {
-            this.loadTrack(track).then(() => this.play()).catch(e => {
-                throw Error(e)
-            })
+            this.loadTrack(track)
+                .then(() => this.play())
+                .catch(e => {
+                    throw Error(e)
+                })
         }
     },
     methods: {
@@ -163,7 +165,8 @@ export default {
             }
 
             return new Promise((resolve, reject) => {
-                    soundcloudSvc.streamTrack(track.id).then(player => {
+                soundcloudSvc.streamTrack(track.id)
+                    .then(player => {
                         this.audioObj = player
                         if (this.muted) {
                             this.audioObj.setVolume(0)

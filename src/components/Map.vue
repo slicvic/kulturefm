@@ -2,7 +2,18 @@
     <div class="map">
         <div class="map__canvas" id="map-canvas"></div>
         <div class="map__popup" id="map-popup">
-            <div v-if="currentLocation">{{ currentLocation.name }}</div>
+            <div v-if="currentLocation">
+                <img :src="currentLocation.details.flag" alt="flag">
+                <h4>{{ currentLocation.details.name }}</h4>
+                Native Name: {{ currentLocation.details.nativeName }}<br>
+                Capital: {{ currentLocation.details.capital }}<br>
+                Population: {{ currentLocation.details.population }}<br>
+                Demonym: {{ currentLocation.details.demonym }}<br>
+                Region: {{ currentLocation.details.region }}<br>
+                Subregion: {{ currentLocation.details.subregion }}<br>
+                Languages: <span v-for="(l, i) in currentLocation.details.languages" :key="l.name">{{ l.name }}<span v-if="i < currentLocation.details.languages.length - 1">, </span></span><br>
+                Currencies: <span v-for="(c, i) in currentLocation.details.currencies" :key="c.name"> {{ c.name }}<span v-if="i < currentLocation.details.currencies.length - 1">, </span></span>
+            </div>
         </div>
     </div>
 </template>
@@ -24,7 +35,7 @@
         border: 1px solid #cccccc;
         bottom: 12px;
         left: -50px;
-        min-width: 280px;
+        min-width: 400px;
     }
     .map__popup:after,
     .map__popup:before {
@@ -48,6 +59,9 @@
         left: 48px;
         margin-left: -11px;
     }
+    .map__popup img {
+        width: 50px;
+    }
 </style>
 
 <script>
@@ -65,18 +79,18 @@ export default {
             mapObj: null,
             viewObj: null,
             overlayObj: null,
-            center: fromLonLat([28.9744, 41.0128])
+            center: fromLonLat([-70.66666666, 19])
         }
     },
     computed: {
         currentLocation() {
-            return this.$store.getters.currentLocation
+            return this.$store.state.currentLocation
         }
     },
     watch: {
-        currentLocation(newLocation) {
-            this.overlayObj.setPosition(fromLonLat([newLocation.coord.lon, newLocation.coord.lat]))
-            this.flyTo(fromLonLat([newLocation.coord.lon, newLocation.coord.lat]), function() {})
+        currentLocation(location) {
+            this.overlayObj.setPosition(fromLonLat([location.latlng[1], location.latlng[0]]))
+            this.flyTo(fromLonLat([location.latlng[1], location.latlng[0]]), function() {})
         }
     },
     mounted() {

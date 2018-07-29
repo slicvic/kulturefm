@@ -27,19 +27,20 @@
         methods: {
             onStartClick() {
                 this.welcomeScreenLoading = true
-                this.$store.dispatch('loadCountries').then(() => {
-                    console.log('loadCountries')
-                    this.$store.dispatch('playRandom').then(() => {
-                                            console.log('playRandom')
-
-                        this.welcomeScreen = false
-                        this.welcomeScreenLoading = false
-                    }).catch(e => {
+                this.$store.dispatch('loadCountries')
+                    .then(() => {
+                        this.$store.dispatch('playRandom')
+                            .then(() => {
+                                this.welcomeScreen = false
+                                this.welcomeScreenLoading = false
+                            })
+                            .catch(e => {
+                                throw Error(e)
+                            })
+                    })
+                    .catch(e => {
                         throw Error(e)
                     })
-                }).catch(e => {
-                    throw Error(e)
-                })
             }
         }
     }
