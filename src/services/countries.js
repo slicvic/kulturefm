@@ -9,27 +9,30 @@ firestore.settings({
 
 const all = function() {
     return new Promise((resolve, reject) => {
-            firestore.collection('countries').get()
-                .then(querySnapshot => {
-                    const countries = []
-                    querySnapshot.forEach(doc => {
-                        countries.push(doc.data())
-                    })
-                    resolve(countries)
-                }).catch(e => reject(e))
-        })
-}
+            let countries = []
 
-const detailsByCountryCode = function(code) {
-    return new Promise((resolve, reject) => {
-            axios.get('https://restcountries.eu/rest/v2/alpha/' + code)
-                .then(response => {
-                    resolve(response.data)
+            // Get base countries from firebase
+            firestore.collection('countries').get() 
+                .then(querySnapshot => {
+                    // Get countries details from api
+                    axios.get('https://restcountries.eu/rest/v2/all') 
+                        .then(countriesDetails => {
+                            querySnapshot.forEach(doc => {
+                                let country = doc.data()
+                                let countryDetails = countriesDetails.data.find(elem => {
+                                    return country.code.toUpperCase() === elem.alpha2Code.toUpperCase()
+                                })
+                                if (countryDetails) {
+                                    country = Object.assign(country, countryDetails)
+                                    countries.push(country)
+                                }
+                            })
+                            resolve(countries)
+                        }).catch(e => reject(e))
                 }).catch(e => reject(e))
         })
 }
 
 export default {
-    all,
-    detailsByCountryCode
+    all
 }

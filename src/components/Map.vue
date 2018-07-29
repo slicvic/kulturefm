@@ -3,16 +3,17 @@
         <div class="map__canvas" id="map-canvas"></div>
         <div class="map__popup" id="map-popup">
             <div v-if="currentLocation">
-                <img :src="currentLocation.details.flag" alt="flag">
-                <h4>{{ currentLocation.details.name }}</h4>
-                Native Name: {{ currentLocation.details.nativeName }}<br>
-                Capital: {{ currentLocation.details.capital }}<br>
-                Population: {{ currentLocation.details.population }}<br>
-                Demonym: {{ currentLocation.details.demonym }}<br>
-                Region: {{ currentLocation.details.region }}<br>
-                Subregion: {{ currentLocation.details.subregion }}<br>
-                Languages: <span v-for="(l, i) in currentLocation.details.languages" :key="l.name">{{ l.name }}<span v-if="i < currentLocation.details.languages.length - 1">, </span></span><br>
-                Currencies: <span v-for="(c, i) in currentLocation.details.currencies" :key="c.name"> {{ c.name }}<span v-if="i < currentLocation.details.currencies.length - 1">, </span></span>
+                <img :src="currentLocation.flag" alt="flag">
+                <h5>{{ currentLocation.name }}</h5>
+                Native Name: {{ currentLocation.nativeName }}<br>
+                Capital: {{ currentLocation.capital }}<br>
+                Population: {{ currentLocation.population }}<br>
+                Demonym: {{ currentLocation.demonym }}<br>
+                Region: {{ currentLocation.region }}<br>
+                Subregion: {{ currentLocation.subregion }}<br>
+                Musical Genres: <span v-for="(g, i) in currentLocation.music_genres" :key="g.name">{{ g.name }}<span v-if="i < currentLocation.music_genres.length - 1">, </span></span><br>
+                Languages: <span v-for="(l, i) in currentLocation.languages" :key="l.name">{{ l.name }}<span v-if="i < currentLocation.languages.length - 1">, </span></span><br>
+                Currencies: <span v-for="(c, i) in currentLocation.currencies" :key="c.name"> {{ c.name }}<span v-if="i < currentLocation.currencies.length - 1">, </span></span>
             </div>
         </div>
     </div>
@@ -84,7 +85,7 @@ export default {
     },
     computed: {
         currentLocation() {
-            return this.$store.state.currentLocation
+            return this.$store.getters.currentLocation
         }
     },
     watch: {

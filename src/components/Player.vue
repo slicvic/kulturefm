@@ -48,7 +48,7 @@
                         <i :class="[muted ? 'fa fa-fw fa-volume-off' : 'fa fa-fw fa-volume-up']"></i>
                     </button>
                     <span v-if="nextDestination">
-                        <span class="font-weight-light">Next stop</span> <i class="fa fa-map-marker-alt"></i> <strong>{{ nextDestination.details.name }}</strong>
+                        <span class="font-weight-light">Next stop</span> <i class="fa fa-map-marker-alt"></i> <strong>{{ nextDestination.name }}</strong>
                     </span>
                 </div>
             </div>
@@ -138,7 +138,7 @@ export default {
     methods: {
         next() {
             this.state = State.LOADING
-            this.$store.dispatch('playRandom')
+            this.$store.dispatch('playNext')
         },
         prev() {
             this.$store.dispatch('playPrev')

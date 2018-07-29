@@ -11,28 +11,25 @@ export default new Vuex.Store({
         playlist: [],
         currentTrackIndex: -1,
         countries: [],
-        currentLocation: null,
         nextDestination: null
     },
     getters: {
         currentTrack(state) {
             return state.playlist[state.currentTrackIndex]
+        },
+        currentLocation(state, getters) {
+            return getters.currentTrack ? getters.currentTrack.country : null
         }
     },
     mutations: {
-        play(state, {track, country}) {
+        addTrack(state, track) {
             state.playlist.push(track)
-            state.currentTrackIndex = state.playlist.length - 1
-            state.currentLocation = country
-            state.nextDestination = _.sample(state.countries)
         },
-        playPrev(state) {
-            const prevIndex = state.currentTrackIndex - 1
-            if (state.playlist[prevIndex]) {
-                state.currentTrackIndex = prevIndex
-            } else {
-                throw Error('Invalid track index (' + prevIndex + ')')
-            }
+        setCurrentTrackIndex(state, index) {
+            state.currentTrackIndex = index
+        },
+        setNextDestination(state, country) {
+            state.nextDestination = country
         },
         setCountries(state, countries) {
             state.countries = countries
@@ -43,47 +40,36 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                     countriesSvc.all()
                         .then(countries => {
-                            const shuffledCountries = _.shuffle(countries)
-                            context.commit('setCountries', shuffledCountries)
-                            resolve()
+                            context.commit('setCountries', countries)
+                            resolve(countries)
                         }).catch(e => reject(e))
                 })
         },
-        play(context, {track, country}) {
-            context.commit('play', {track, country})
+        play({commit, state}, {track, fromCountry}) {
+            commit('addTrack', Object.assign(track, {country: fromCountry}))
+            commit('setCurrentTrackIndex', state.playlist.length - 1)
+            commit('setNextDestination', _.sample(_.shuffle(state.countries)))
         },
-        playPrev(context) {
-            context.commit('playPrev')
+        playNext({dispatch, state}) {
+            return dispatch('playRandom', {fromCountry: state.nextDestination})
         },
-        getRandomCountry({state}) {
+        playPrev({commit, state}) {
+            commit('setCurrentTrackIndex', state.currentTrackIndex - 1)
+        },
+        playRandom({dispatch, state}, {fromCountry = null, genre = null} = {}) {
+            fromCountry = fromCountry || _.sample(_.shuffle(state.countries))
+            genre = genre || _.sample(_.shuffle(fromCountry.music_genres))
+
             return new Promise((resolve, reject) => {
-                    const country = _.sample(state.countries)
-                    if (country.details) {
-                        resolve(country)
-                    } else {
-                        countriesSvc.detailsByCountryCode(country.code)
-                            .then(details => {
-                                country.details = details
-                                resolve(country)
-                            }).catch(e => reject(e))
-                    }
-                })
-        },
-        playRandom({commit, dispatch}) {
-            return new Promise((resolve, reject) => {
-                dispatch('getRandomCountry')
-                    .then(country => {
-                        const genre = _.sample(_.shuffle(country.genres))
-                        soundcloudSvc.findTracks({
-                            genres: genre,
-                            limit: 200
-                        }).then(tracks => {
-                            const track = _.sample(_.shuffle(tracks))
-                            commit('play', {track, country})
-                            resolve()
-                        }).catch(e => reject(e))
+                    soundcloudSvc.findTracks({
+                        genres: genre.code,
+                        limit: 200
+                    }).then(tracks => {
+                        const track = _.sample(_.shuffle(tracks))
+                        dispatch('play', {track, fromCountry})
+                        resolve(track)
                     }).catch(e => reject(e))
-                })
+                })        
         }
     }
 })
