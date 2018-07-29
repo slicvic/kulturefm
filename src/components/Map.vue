@@ -2,7 +2,7 @@
     <div class="map">
         <div class="map__canvas" id="map-canvas"></div>
         <div class="map__popup" id="map-popup">
-            <div>{{ currentLocation.name }}</div>
+            <div v-if="currentLocation">{{ currentLocation.name }}</div>
         </div>
     </div>
 </template>

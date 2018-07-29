@@ -10,7 +10,6 @@
     import WelcomeComponent from './Welcome.vue'
     import MapComponent from './Map.vue'
     import PlayerComponent from './Player.vue'
-    import searchSvc from '../services/search.js'
 
     export default {
         name: 'app-component',
@@ -28,14 +27,19 @@
         methods: {
             onStartClick() {
                 this.welcomeScreenLoading = true
-                searchSvc.findRandomTrack()
-                    .then(response => {
-                        this.$store.dispatch('playTrack', response.track)
+                this.$store.dispatch('loadCountries').then(() => {
+                    console.log('loadCountries')
+                    this.$store.dispatch('playRandom').then(() => {
+                                            console.log('playRandom')
+
                         this.welcomeScreen = false
-                    })
-                    .catch(e => { 
+                        this.welcomeScreenLoading = false
+                    }).catch(e => {
                         throw Error(e)
                     })
+                }).catch(e => {
+                    throw Error(e)
+                })
             }
         }
     }

@@ -74,11 +74,10 @@
 </style>
 
 <script>
-import searchSvc from '../services/search.js'
 import soundcloudSvc from '../services/soundcloud.js'
 
 /**
- * Internal states.
+ * INTERNAL STATES.
  */
 const State = {
     IDLE: 'idle',
@@ -128,21 +127,19 @@ export default {
         }
     },
     watch: {
-        currentTrackIndex(index) {
-            this.loadTrack(index).then(() => this.play())
+        currentTrack(track) {
+            this.loadTrack(track).then(() => this.play()).catch(e => {
+                throw Error(e)
+            })
         }
     },
     methods: {
         next() {
             this.state = State.LOADING
-            searchSvc.findRandomTrackFrom(this.$store.state.nextDestination)
-                .then(response => this.$store.dispatch('playTrack', response.track))
-                .catch(e => { 
-                    throw Error(e)
-                })
+            this.$store.dispatch('playRandom')
         },
         prev() {
-            this.$store.dispatch('playPrevTrack')
+            this.$store.dispatch('playPrev')
         },
         play() {
             this.audioObj.play()
@@ -160,14 +157,13 @@ export default {
         togglePlay() {
             (this.state === State.PAUSED) ? this.play() : this.pause()
         },
-        loadTrack(index) {
+        loadTrack(track) {
             if (this.audioObj) {
                 this.audioObj.kill()
             }
+
             return new Promise((resolve, reject) => {
-                const trackToPlay = this.playlist[index]
-                soundcloudSvc.streamTrack(trackToPlay.id)
-                    .then(player => {
+                    soundcloudSvc.streamTrack(track.id).then(player => {
                         this.audioObj = player
                         if (this.muted) {
                             this.audioObj.setVolume(0)
@@ -198,8 +194,7 @@ export default {
                         this.state = State.ERROR
                         reject(e)
                     })
-                }
-            )
+                })
         }
     }
 }
