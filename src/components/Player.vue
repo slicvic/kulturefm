@@ -130,9 +130,7 @@ export default {
         currentTrack(track) {
             this.loadTrack(track)
                 .then(() => this.play())
-                .catch(e => {
-                    throw Error(e)
-                })
+                .catch(console.error)
         }
     },
     methods: {

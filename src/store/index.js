@@ -45,28 +45,36 @@ export default new Vuex.Store({
                         }).catch(e => reject(e))
                 })
         },
-        play({commit, state}, {track, fromCountry}) {
-            commit('addTrack', Object.assign(track, {country: fromCountry}))
+        play({commit, state}, {track, country}) {
+            commit('addTrack', Object.assign(track, {country}))
             commit('setCurrentTrackIndex', state.playlist.length - 1)
-            commit('setNextDestination', _.sample(_.shuffle(state.countries)))
+            let nextDestination = null
+            const last3Locations = [
+                state.playlist.length ? state.playlist[state.playlist.length - 1].country.code : null,
+                state.playlist.length > 1 ? state.playlist[state.playlist.length - 2].country.code : null,
+                state.playlist.length > 2 ? state.playlist[state.playlist.length - 3].country.code : null
+            ]
+            do {
+                nextDestination =  _.sample(_.shuffle(state.countries))
+            } while (last3Locations.includes(nextDestination.code))
+            commit('setNextDestination', nextDestination)
         },
         playNext({dispatch, state}) {
-            return dispatch('playRandom', {fromCountry: state.nextDestination})
+            return dispatch('playRandom', {country: state.nextDestination})
         },
         playPrev({commit, state}) {
             commit('setCurrentTrackIndex', state.currentTrackIndex - 1)
         },
-        playRandom({dispatch, state}, {fromCountry = null, genre = null} = {}) {
-            fromCountry = fromCountry || _.sample(_.shuffle(state.countries))
-            genre = genre || _.sample(_.shuffle(fromCountry.music_genres))
-
+        playRandom({dispatch, state}, {country = null} = {}) {
             return new Promise((resolve, reject) => {
+                    country = country || _.sample(_.shuffle(state.countries))
+                    const keyword = _.sample(_.shuffle(country.artists))
                     soundcloudSvc.findTracks({
-                        genres: genre.code,
+                        q: keyword,
                         limit: 200
                     }).then(tracks => {
                         const track = _.sample(_.shuffle(tracks))
-                        dispatch('play', {track, fromCountry})
+                        dispatch('play', {track, country})
                         resolve(track)
                     }).catch(e => reject(e))
                 })        

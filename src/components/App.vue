@@ -27,6 +27,7 @@
         methods: {
             onStartClick() {
                 this.welcomeScreenLoading = true
+                
                 this.$store.dispatch('loadCountries')
                     .then(() => {
                         this.$store.dispatch('playRandom')
@@ -35,11 +36,13 @@
                                 this.welcomeScreenLoading = false
                             })
                             .catch(e => {
-                                throw Error(e)
+                                console.error(e)
+                                this.welcomeScreenLoading = false
                             })
                     })
                     .catch(e => {
-                        throw Error(e)
+                        console.error(e)
+                        this.welcomeScreenLoading = false
                     })
             }
         }

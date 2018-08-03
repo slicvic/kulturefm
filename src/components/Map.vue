@@ -11,7 +11,6 @@
                 Demonym: {{ currentLocation.demonym }}<br>
                 Region: {{ currentLocation.region }}<br>
                 Subregion: {{ currentLocation.subregion }}<br>
-                Musical Genres: <span v-for="(g, i) in currentLocation.music_genres" :key="g.name">{{ g.name }}<span v-if="i < currentLocation.music_genres.length - 1">, </span></span><br>
                 Languages: <span v-for="(l, i) in currentLocation.languages" :key="l.name">{{ l.name }}<span v-if="i < currentLocation.languages.length - 1">, </span></span><br>
                 Currencies: <span v-for="(c, i) in currentLocation.currencies" :key="c.name"> {{ c.name }}<span v-if="i < currentLocation.currencies.length - 1">, </span></span>
             </div>
