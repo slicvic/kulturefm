@@ -1,32 +1,32 @@
 <template>
     <div class="player">
-        <div class="player__inner container-fluid">
+        <div class="player-inner container-fluid">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="player__track-info media" v-if="currentTrack">
-                        <img class="mr-3" :src="currentTrack.artwork_url">
-                        <div class="media-body align-self-center">
-                            <h6 class="mt-0">{{ currentTrack.title }}</h6>
+                    <div class="track media" v-if="currentTrack">
+                        <img class="mr-3 track-cover-img" :src="currentTrack.artwork_url">
+                        <div class="media-body align-self-center track-title-wrapper">
+                            <h6 class="mt-0 track-title">{{ currentTrack.title }}</h6>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 text-center">
                     <button
-                        class="player__control btn btn-link"
+                        class="player-control btn btn-link"
                         title="Revisit previous location"
                         :disabled="!canSkipToPrev"
                         @click="prev">
                         <i class="fa fa-fw fa-step-backward"></i>
                     </button>
                     <button
-                        class="player__control player__control--play btn btn-link"
+                        class="player-control btn btn-link"
                         :disabled="!canPlayOrPause"
                         :title="[isPlaying ? 'Pause' : 'Play']"
                         @click="togglePlay">
                         <i :class="['fa-3x', isPlaying ? 'fa fa-fw fa-pause-circle' : 'fa fa-fw fa-play-circle']"></i>
                     </button>
                     <button
-                        class="player__control btn btn-link"
+                        class="player-control btn btn-link"
                         title="Skip to next destination"
                         :disabled="!canSkipToNext"
                         @click="next">
@@ -35,19 +35,19 @@
                 </div>
                 <div class="col-md-4 text-right align-self-center">
                     <button
-                        class="player__control btn btn-link"
+                        class="player-control btn btn-link"
                         title="Restart track"
                         :disabled="!canRestart"
                         @click="restart">
                         <i class="fa fa-fw fa-redo-alt"></i>
                     </button>
                     <button
-                        class="player__control btn btn-link"
+                        class="player-control btn btn-link"
                         :title="[muted ? 'Unmute' : 'Mute']"
                         @click="toggleMute">
                         <i :class="[muted ? 'fa fa-fw fa-volume-off' : 'fa fa-fw fa-volume-up']"></i>
                     </button>
-                    <span v-if="nextDestination">
+                    <span class="next-stop" v-if="nextDestination">
                         <span class="font-weight-light">Next stop</span> <i class="fa fa-map-marker-alt"></i> <strong>{{ nextDestination.name }}</strong>
                     </span>
                 </div>
@@ -62,14 +62,35 @@
         bottom: 0;
         width: 100%;
         height: 60px;
-        background-color: #f5f5f5;
+        background-color: #000;
     }
-    .player__inner {
+    .player-inner {
         padding-left: 0;
     }
-    .player__track-info img {
+    .player-control {
+        color: #476CFB;
+    }
+    .player-control:hover {
+        color: #3033AB;
+    }
+    .player-control:disabled {
+        color: #3e4e88;
+    }
+    .player .track-cover-img {
         width: 60px;
         height: 60px;
+    }
+    .player .track-title-wrapper {
+        overflow: hidden;
+    }
+    .player .track-title {
+        color: #ccc;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    .player .next-stop {
+        color: #ccc;
     }
 </style>
 

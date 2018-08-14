@@ -6,6 +6,39 @@
     </div>
 </template>
 
+<style>
+    .app-color1 {
+        color: #476CFB;
+    }
+    .app-color2 {
+        color: #3033AB;
+    }
+    .app-color3 {
+        color: #7EBFFD;
+    }
+    .app-color4 {
+        color: #B0CEFD;
+    }
+    .app-color5 {
+        color: #E1DDFC;
+    }
+    .app-bg1 {
+        background-color: #476CFB;
+    }
+    .app-bg2 {
+        background-color: #3033AB;
+    }
+    .app-bg3 {
+        background-color: #7EBFFD;
+    }
+      .app-bg4 {
+        background-color: #B0CEFD;
+    }
+    .app-bg5 {
+        background-color: #E1DDFC;
+    }
+</style>
+
 <script>
     import WelcomeComponent from './Welcome.vue'
     import MapComponent from './Map.vue'

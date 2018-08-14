@@ -1,7 +1,7 @@
 <template>
     <div class="map">
-        <div class="map__canvas" id="map-canvas"></div>
-        <div class="map__popup" id="map-popup">
+        <div class="map-canvas" id="map-canvas"></div>
+        <div class="map-popup" id="map-popup">
             <div v-if="currentLocation">
                 <img :src="currentLocation.flag" alt="flag">
                 <h5>{{ currentLocation.name }}</h5>
@@ -19,13 +19,13 @@
 </template>
 
 <style>
-    .map__canvas {
+    .map-canvas {
         position: fixed;
         top: 0;
         width: 100%;
         height: calc(100% - 60px);
     }
-    .map__popup {
+    .map-popup {
         position: absolute;
         background-color: white;
         -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
@@ -37,8 +37,8 @@
         left: -50px;
         min-width: 400px;
     }
-    .map__popup:after,
-    .map__popup:before {
+    .map-popup:after,
+    .map-popup:before {
         top: 100%;
         border: solid transparent;
         content: " ";
@@ -47,19 +47,19 @@
         position: absolute;
         pointer-events: none;
     }
-    .map__popup:after {
+    .map-popup:after {
         border-top-color: white;
         border-width: 10px;
         left: 48px;
         margin-left: -10px;
     }
-    .map__popup:before {
+    .map-popup:before {
         border-top-color: #cccccc;
         border-width: 11px;
         left: 48px;
         margin-left: -11px;
     }
-    .map__popup img {
+    .map-popup img {
         width: 50px;
     }
 </style>
@@ -76,9 +76,9 @@ export default {
     name: 'map-component',
     data() {
         return {
-            mapObj: null,
-            viewObj: null,
-            overlayObj: null,
+            olMap: null,
+            olView: null,
+            olOverlay: null,
             center: fromLonLat([-70.66666666, 19])
         }
     },
@@ -89,17 +89,17 @@ export default {
     },
     watch: {
         currentLocation(location) {
-            this.overlayObj.setPosition(fromLonLat([location.latlng[1], location.latlng[0]]))
+            this.olOverlay.setPosition(fromLonLat([location.latlng[1], location.latlng[0]]))
             this.flyTo(fromLonLat([location.latlng[1], location.latlng[0]]), function() {})
         }
     },
     mounted() {
-        this.viewObj = new View({
+        this.olView = new View({
             center: this.center,
             zoom: 6
         })
 
-        this.overlayObj = new Overlay({
+        this.olOverlay = new Overlay({
             element: document.getElementById('map-popup'),
             autoPan: true,
             autoPanAnimation: {
@@ -107,10 +107,10 @@ export default {
             }
         })
 
-        this.mapObj = new Map({
+        this.olMap = new Map({
             target: 'map-canvas',
-            view: this.viewObj,
-            overlays: [this.overlayObj],
+            view: this.olView,
+            overlays: [this.olOverlay],
             loadTilesWhileAnimating: true,
             loadTilesWhileInteracting: true,
             layers: [
@@ -138,12 +138,12 @@ export default {
                 }
             }
 
-            this.viewObj.animate({
+            this.olView.animate({
                 center: location,
                 duration: duration
             }, callback)
 
-            this.viewObj.animate({
+            this.olView.animate({
                 zoom: zoom - 1,
                 duration: duration / 2
             }, {

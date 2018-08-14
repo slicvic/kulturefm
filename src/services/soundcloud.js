@@ -1,7 +1,7 @@
 import config from '../config/index.js'
 
 SC.initialize({
-    client_id: config.soundCloud.api.clientId
+    client_id: config.soundcloud.api.clientId
 })
 
 export default {

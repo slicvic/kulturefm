@@ -3,13 +3,13 @@
         <div class="align-self-center">
             <h1>Kulture.fm</h1>
             <button
-                class="welcome__start-btn btn btn-link"
+                class="welcome-start-btn btn btn-link"
                 title="Start culturalizing"
                 v-if="!loading"
                 @click="onStartClick">
                 <i class="fa fa-fw fa-play-circle"></i>
             </button>
-            <i v-if="loading" class="welcome__loading fa fa-spinner fa-spin"></i> 
+            <i v-if="loading" class="welcome-loading fa fa-spinner fa-spin"></i> 
         </div>
     </div>
 </template>
@@ -24,11 +24,16 @@
         color: #fff;
         text-align: center;
     }
-    .welcome__start-btn {
+    .welcome-start-btn {
         font-size: 6rem;
+        color: #476CFB;
     }
-    .welcome__loading {
+    .welcome-start-btn:hover {
+        color: #3033AB;
+    }
+    .welcome-loading {
         font-size: 6rem;  
+        color: #476CFB;
     }
 </style>
 

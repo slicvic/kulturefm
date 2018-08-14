@@ -49,14 +49,14 @@ export default new Vuex.Store({
             commit('addTrack', Object.assign(track, {country}))
             commit('setCurrentTrackIndex', state.playlist.length - 1)
             let nextDestination = null
-            const last3Locations = [
+            const prevLocations = [
                 state.playlist.length ? state.playlist[state.playlist.length - 1].country.code : null,
                 state.playlist.length > 1 ? state.playlist[state.playlist.length - 2].country.code : null,
                 state.playlist.length > 2 ? state.playlist[state.playlist.length - 3].country.code : null
             ]
             do {
                 nextDestination =  _.sample(_.shuffle(state.countries))
-            } while (last3Locations.includes(nextDestination.code))
+            } while (prevLocations.includes(nextDestination.code))
             commit('setNextDestination', nextDestination)
         },
         playNext({dispatch, state}) {
@@ -68,9 +68,9 @@ export default new Vuex.Store({
         playRandom({dispatch, state}, {country = null} = {}) {
             return new Promise((resolve, reject) => {
                     country = country || _.sample(_.shuffle(state.countries))
-                    const keyword = _.sample(_.shuffle(country.artists))
+                    const searchTerm = _.sample(_.shuffle(country.artists))
                     soundcloudSvc.findTracks({
-                        q: keyword,
+                        q: searchTerm,
                         limit: 200
                     }).then(tracks => {
                         const track = _.sample(_.shuffle(tracks))

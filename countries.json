@@ -1,0 +1,63 @@
+{
+    "countries": [
+        {
+            "code": "do",
+            "name": "Dominican Republic",
+            "artists": [
+                "anthony santos",
+                "joe veras",
+                "aventura",
+                "hector acosta",
+                "el torito",
+                "luis vargas",
+                "prince royce",
+                "juan luis guerra",
+                "raulin rodriguez",
+                "zacarias ferreira",
+                "romeo santos",
+                "monchy y alexandra",
+                "leonardo paniagua",
+                "alex bueno",
+                "luis segura",
+                "el chaval",
+                "luis miguel del amargue",
+                "teodoro reyes",
+                "chichi peralta"
+            ]
+        },
+        {
+            "code": "co",
+            "name": "Colombia",
+            "artists": [
+                "grupo niche",
+                "carlos vives",
+                "maluma",
+                "j balvin",
+                "juanes",
+                "shakira",
+                "joe arroyo",
+                "charlie zaa",
+                "andres cabas",
+                "emiliano zuleta",
+                "miguel bose",
+                "fruko y sus tesos",
+                "sonora carruseles"
+            ]
+        },
+        {
+            "code": "cu",
+            "name": "Cuba",
+            "artists": [
+                "celia cruz",
+                "willy chirino"
+            ]
+        },
+        {
+            "code": "in",
+            "name": "India",
+            "artists": [
+                "lucky ali"
+            ]
+        }
+    ]   
+}
