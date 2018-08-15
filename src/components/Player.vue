@@ -3,17 +3,17 @@
         <div class="player-inner container-fluid">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="track media" v-if="currentTrack">
-                        <img class="mr-3 track-cover-img" :src="currentTrack.artwork_url">
-                        <div class="media-body align-self-center track-title-wrapper">
-                            <h6 class="mt-0 track-title">{{ currentTrack.title }}</h6>
+                    <div class="media track-info" v-if="currentTrack">
+                        <img class="track-cover-img" v-if="currentTrack.artwork_url" :src="currentTrack.artwork_url">
+                        <div class="media-body align-self-center ml-3 track-title-wrapper">
+                            <h6 class="mt-0 track-title" :title="currentTrack.title">{{ currentTrack.title }}</h6>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 text-center">
                     <button
                         class="player-control btn btn-link"
-                        title="Revisit previous location"
+                        title="Skip to previous track"
                         :disabled="!canSkipToPrev"
                         @click="prev">
                         <i class="fa fa-fw fa-step-backward"></i>
@@ -27,7 +27,7 @@
                     </button>
                     <button
                         class="player-control btn btn-link"
-                        title="Skip to next destination"
+                        title="Skip to next track"
                         :disabled="!canSkipToNext"
                         @click="next">
                         <i class="fa fa-fw fa-step-forward"></i>
@@ -57,15 +57,15 @@
 </template>
 
 <style>
+    .player-inner {
+        padding-left: 0;
+    }
     .player {
         position: fixed;
         bottom: 0;
         width: 100%;
         height: 60px;
         background-color: #000;
-    }
-    .player-inner {
-        padding-left: 0;
     }
     .player-control {
         color: #476CFB;
@@ -79,9 +79,13 @@
     .player .track-cover-img {
         width: 60px;
         height: 60px;
+        background: #000;
     }
     .player .track-title-wrapper {
         overflow: hidden;
+    }
+    .player .track-info {
+        height: 100%;
     }
     .player .track-title {
         color: #ccc;
