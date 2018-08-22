@@ -5,6 +5,7 @@
                 <div class="col-md-4">
                     <div class="media track-info" v-if="currentTrack">
                         <img class="track-cover-img" v-if="currentTrack.artwork_url" :src="currentTrack.artwork_url">
+                        <i class="fa fa-music track-cover-ico" v-if="!currentTrack.artwork_url"></i>
                         <div class="media-body align-self-center ml-3 track-title-wrapper">
                             <h6 class="mt-0 track-title" :title="currentTrack.title">{{ currentTrack.title }}</h6>
                         </div>
@@ -57,45 +58,51 @@
 </template>
 
 <style>
-    .player-inner {
-        padding-left: 0;
-    }
-    .player {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        height: 60px;
-        background-color: #000;
-    }
-    .player-control {
-        color: #476CFB;
-    }
-    .player-control:hover {
-        color: #3033AB;
-    }
-    .player-control:disabled {
-        color: #3e4e88;
-    }
-    .player .track-cover-img {
-        width: 60px;
-        height: 60px;
-        background: #000;
-    }
-    .player .track-title-wrapper {
-        overflow: hidden;
-    }
-    .player .track-info {
-        height: 100%;
-    }
-    .player .track-title {
-        color: #ccc;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-    .player .next-stop {
-        color: #ccc;
-    }
+.player-inner {
+    padding-left: 0;
+}
+.player {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: rgba(0, 0, 0, .8);
+}
+.player-control {
+    color: #476CFB;
+}
+.player-control:hover {
+    color: #3033AB;
+}
+.player-control:disabled {
+    color: #3e4e88;
+}
+.player .track-cover-img {
+    width: 60px;
+    height: 60px;
+    background: #000;
+}
+.player .track-cover-ico {
+    font-size: 50px;
+    color: #777;
+    height: 100%;
+    padding: 5px;
+}
+.player .track-title-wrapper {
+    overflow: hidden;
+}
+.player .track-info {
+    height: 100%;
+}
+.player .track-title {
+    color: #ccc;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.player .next-stop {
+    color: #ccc;
+}
 </style>
 
 <script>

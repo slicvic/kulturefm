@@ -1,85 +1,128 @@
 <template>
     <div class="map">
         <div class="map-canvas" id="map-canvas"></div>
-        <div class="map-popup" id="map-popup">
+        <div class="map-infowindow" id="map-infowindow">
             <div v-if="currentLocation">
-                <img :src="currentLocation.flag" alt="flag">
-                <h5>{{ currentLocation.name }}</h5>
-                Native Name: {{ currentLocation.nativeName }}<br>
-                Capital: {{ currentLocation.capital }}<br>
-                Population: {{ currentLocation.population }}<br>
-                Demonym: {{ currentLocation.demonym }}<br>
-                Region: {{ currentLocation.region }}<br>
-                Subregion: {{ currentLocation.subregion }}<br>
-                Languages: <span v-for="(l, i) in currentLocation.languages" :key="l.name">{{ l.name }}<span v-if="i < currentLocation.languages.length - 1">, </span></span><br>
-                Currencies: <span v-for="(c, i) in currentLocation.currencies" :key="c.name"> {{ c.name }}<span v-if="i < currentLocation.currencies.length - 1">, </span></span>
+                <div class="d-flex mb-3">
+                    <img class="rounded flag-img" :src="currentLocation.flag">
+                    <h4 class="align-self-center ml-3 country-name">{{ currentLocation.name }}</h4>
+                </div>
+                <table class="table table-striped table-sm">
+                    <tbody>
+                        <tr>
+                            <th>Capital</th>
+                            <td>{{ currentLocation.capital }}</td>
+                        </tr>
+                        <tr>
+                            <th>Population</th>
+                            <td>{{ currentLocation.population.toLocaleString('en') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Demonym</th>
+                            <td>{{ currentLocation.demonym }}</td>
+                        </tr>
+                        <tr>
+                            <th>Region</th>
+                            <td>{{ currentLocation.region }}</td>
+                        </tr>
+                        <tr>
+                            <th>Subregion</th>
+                            <td>{{ currentLocation.subregion }}</td>
+                        </tr>
+                        <tr>
+                            <th>Languages</th>
+                            <td>
+                                <span v-for="(l, i) in currentLocation.languages" :key="l.name">{{ l.name }}<span v-if="i < currentLocation.languages.length - 1">, </span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Currencies</th>
+                            <td>
+                                <span v-for="(c, i) in currentLocation.currencies" :key="c.name"> {{ c.name }}<span v-if="i < currentLocation.currencies.length - 1">, </span></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </template>
 
 <style>
-    .map-canvas {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        height: calc(100% - 60px);
-    }
-    .map-popup {
-        position: absolute;
-        background-color: white;
-        -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #cccccc;
-        bottom: 12px;
-        left: -50px;
-        min-width: 400px;
-    }
-    .map-popup:after,
-    .map-popup:before {
-        top: 100%;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-    }
-    .map-popup:after {
-        border-top-color: white;
-        border-width: 10px;
-        left: 48px;
-        margin-left: -10px;
-    }
-    .map-popup:before {
-        border-top-color: #cccccc;
-        border-width: 11px;
-        left: 48px;
-        margin-left: -11px;
-    }
-    .map-popup img {
-        width: 50px;
-    }
+.map-canvas {
+    position: fixed;
+    width: 100%;
+    height: 100%;/*calc(100% - 100px); /* Header + Player = 100px tall */
+}
+.map .ol-attribution {
+    bottom: 4.5em;
+}
+.map-infowindow {
+    position: absolute;
+    background-color: #00000080;
+    -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+    padding: 15px;
+    border-radius: 10px;
+    border: 0;
+    bottom: 12px;
+    left: -50px;
+    min-width: 400px;
+}
+.map-infowindow:after {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: rgba(0,0,0,.2);
+    border-width: 10px;
+    left: 48px;
+    margin-left: -10px;
+}
+.map-infowindow .country-name {
+    color: #fff;
+}
+.map-infowindow table {
+    color: #f2f2f2;
+}
+.map-infowindow table th, 
+.map-infowindow table td {
+    border: 0;
+}
+.map-infowindow .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #00000030;
+}
+.map .flag-img {
+    width: 50px;
+    height: 35px;
+}
 </style>
 
 <script>
-import Map from 'ol/Map.js'
-import View from 'ol/View.js'
+import {Map, View} from 'ol'
 import TileLayer from 'ol/layer/Tile.js'
 import {fromLonLat} from 'ol/proj.js'
 import OSM from 'ol/source/OSM.js'
 import Overlay from 'ol/Overlay.js'
 
+import VectorSource from 'ol/source/Vector.js'
+import VectorLayer from 'ol/layer/Vector.js'
+import Feature from 'ol/Feature.js'
+import Point from 'ol/geom/Point.js'
+import {Circle, Fill, Style} from 'ol/style.js'
+
 export default {
     name: 'map-component',
     data() {
         return {
+            center: fromLonLat([-70.66666666, 19]),
             olMap: null,
             olView: null,
-            olOverlay: null,
-            center: fromLonLat([-70.66666666, 19])
+            olInfowindow: null,
+            olVectorSource: null
         }
     },
     computed: {
@@ -89,8 +132,29 @@ export default {
     },
     watch: {
         currentLocation(location) {
-            this.olOverlay.setPosition(fromLonLat([location.latlng[1], location.latlng[0]]))
-            this.flyTo(fromLonLat([location.latlng[1], location.latlng[0]]), function() {})
+            const coordinates = fromLonLat([location.latlng[1], location.latlng[0]])
+
+            // Fly to location
+            this.flyTo(coordinates, () => {
+                // Set infowindow position
+                this.olInfowindow.setPosition(coordinates)
+
+                // Place marker
+                const marker = new Feature({
+                    geometry: new Point(coordinates)
+                })
+
+                marker.setStyle(new Style({
+                    image: new Circle({
+                        radius: 10,
+                        fill: new Fill({
+                            color: 'rgba(0, 0, 0, 0.5)'
+                        })
+                    })
+                }))
+        
+                this.olVectorSource.addFeature(marker);
+            })
         }
     },
     mounted() {
@@ -99,8 +163,8 @@ export default {
             zoom: 6
         })
 
-        this.olOverlay = new Overlay({
-            element: document.getElementById('map-popup'),
+        this.olInfowindow = new Overlay({
+            element: document.getElementById('map-infowindow'),
             autoPan: true,
             autoPanAnimation: {
                 duration: 250
@@ -110,7 +174,7 @@ export default {
         this.olMap = new Map({
             target: 'map-canvas',
             view: this.olView,
-            overlays: [this.olOverlay],
+            overlays: [this.olInfowindow],
             loadTilesWhileAnimating: true,
             loadTilesWhileInteracting: true,
             layers: [
@@ -120,6 +184,12 @@ export default {
                 })
             ]
         })
+
+        this.olVectorSource = new VectorSource({});
+
+        this.olMap.addLayer(new VectorLayer({
+            source: this.olVectorSource
+        }));
     },
     methods: {
         flyTo(location, done) {

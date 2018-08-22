@@ -1,40 +1,43 @@
 <template>
     <div class="welcome d-flex justify-content-center">
         <div class="align-self-center">
-            <h1>Kulture.fm</h1>
+            <h1 class="logo">kulture.fm</h1>
             <button
                 class="welcome-start-btn btn btn-link"
                 title="Start culturalizing"
-                v-if="!loading"
+                :disabled="loading"
                 @click="onStartClick">
-                <i class="fa fa-fw fa-play-circle"></i>
+                <i :class="{'fa': true, 'fa-fw': true, 'fa-play-circle': !loading, 'fa-spinner fa-spin': loading}"></i>
             </button>
-            <i v-if="loading" class="welcome-loading fa fa-spinner fa-spin"></i> 
         </div>
     </div>
 </template>
 
 <style>
-    .welcome {
-        position: absolute;
-        z-index: 3000;
-        width: 100%;
-        height: 100%;
-        background: #000;
-        color: #fff;
-        text-align: center;
-    }
-    .welcome-start-btn {
-        font-size: 6rem;
-        color: #476CFB;
-    }
-    .welcome-start-btn:hover {
-        color: #3033AB;
-    }
-    .welcome-loading {
-        font-size: 6rem;  
-        color: #476CFB;
-    }
+.welcome {
+    position: absolute;
+    z-index: 3000;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #fff;
+    text-align: center;
+}
+.welcome .logo {
+    font-size: 5.5rem;
+    height: 90px;
+}
+.welcome-start-btn {
+    font-size: 6rem;
+}
+.welcome-start-btn,
+.welcome-start-btn:disabled {
+    color: #476CFB;
+    opacity: 1;
+}
+.welcome-start-btn:hover {
+    color: #3033AB;
+}
 </style>
 
 <script>
