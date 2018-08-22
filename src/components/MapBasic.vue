@@ -1,5 +1,5 @@
 <template>
-    <div class="map">
+    <div class="map-basic map">
         <div class="map-canvas" id="map-canvas"></div>
         <div class="map-infowindow" id="map-infowindow">
             <div v-if="currentLocation">
@@ -55,12 +55,7 @@
     height: 100%;
 }
 .map .ol-attribution {
-    top: .5em;
-    bottom: auto;
-}
-.map-infowindow .flag-img {
-    width: 50px;
-    height: 35px;
+    bottom: 4.5em;
 }
 .map-infowindow {
     position: absolute;
@@ -100,29 +95,34 @@
 .map-infowindow .table-striped tbody tr:nth-of-type(odd) {
     background-color: #00000030;
 }
+.map .flag-img {
+    width: 50px;
+    height: 35px;
+}
 </style>
 
- <script>
+<script>
 import {Map, View} from 'ol'
+import TileLayer from 'ol/layer/Tile.js'
 import {fromLonLat} from 'ol/proj.js'
+import OSM from 'ol/source/OSM.js'
 import Overlay from 'ol/Overlay.js'
-import GeoJSON from 'ol/format/GeoJSON.js';
-import {Stroke, Text, Fill, Style} from 'ol/style.js';
+
 import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
-import TileLayer from 'ol/layer/Tile.js'
-import OSM from 'ol/source/OSM.js'
+import Feature from 'ol/Feature.js'
+import Point from 'ol/geom/Point.js'
+import {Circle, Fill, Style} from 'ol/style.js'
+
 export default {
-    name: 'map-component',
+    name: 'map-basic-component',
     data() {
         return {
-            initialZoom: 6,
-            initialCenter: fromLonLat([-70.66666666, 19]),
+            center: fromLonLat([-70.66666666, 19]),
             olMap: null,
             olView: null,
             olInfowindow: null,
-            olVectorSource: null,
-            olFeatureOverlay: null
+            olVectorSource: null
         }
     },
     computed: {
@@ -134,76 +134,33 @@ export default {
         currentLocation(location) {
             const coordinates = fromLonLat([location.latlng[1], location.latlng[0]])
 
-            this.flyTo(coordinates, 5, () => {
+            // Fly to location
+            this.flyTo(coordinates, () => {
+                // Set infowindow position
                 this.olInfowindow.setPosition(coordinates)
 
-                const feature = this.olVectorSource.getFeatureById(location.alpha3Code)
-                const cnv = document.createElement('canvas')
-                const ctx = cnv.getContext('2d')
-                const img = new Image()
-                img.src = location.flag
-                img.onload = function() {
-                    const pattern = ctx.createPattern(img, 'repeat')
-                    feature.setStyle(new Style({
-                        fill: new Fill({
-                            color: pattern
-                        })
-                    }))
-                }
+                // Place marker
+                const marker = new Feature({
+                    geometry: new Point(coordinates)
+                })
 
-                this.olFeatureOverlay.getSource().addFeature(feature)
+                marker.setStyle(new Style({
+                    image: new Circle({
+                        radius: 10,
+                        fill: new Fill({
+                            color: 'rgba(0, 0, 0, 0.5)'
+                        })
+                    })
+                }))
+        
+                this.olVectorSource.addFeature(marker);
             })
         }
     },
     mounted() {
-        const olStyle = new Style({
-            /*fill: new Fill({
-                color: 'rgba(0, 0, 0, 0.6)'
-            }),
-            stroke: new Stroke({
-                color: '#319FD3',
-                width: 1
-            }),*/
-            text: new Text({
-                font: '12px Roboto,sans-serif',
-                fill: new Fill({
-                    color: '#000'
-                }),
-                stroke: new Stroke({
-                    color: '#fff',
-                    width: 3
-                })
-            })
-        })
-
-        const olHighlightStyle = new Style({
-            /*stroke: new Stroke({
-                color: '#f00',
-                width: 1
-            }),
-            fill: new Fill({
-                color: 'rgba(255, 0, 0, 0.1)'
-            }),*/
-            text: new Text({
-                font: '12px Roboto,sans-serif',
-                fill: new Fill({
-                    color: '#000'
-                }),
-                stroke: new Stroke({
-                    color: '#f00',
-                    width: 3
-                })
-            })
-        })
-
         this.olView = new View({
-            center: this.initialCenter,
-            zoom: this.initialZoom
-        })
-
-        this.olVectorSource = new VectorSource({
-            url: 'https://openlayers.org/en/latest/examples/data/geojson/countries.geojson',
-            format: new GeoJSON()
+            center: this.center,
+            zoom: 6
         })
 
         this.olInfowindow = new Overlay({
@@ -216,37 +173,28 @@ export default {
 
         this.olMap = new Map({
             target: 'map-canvas',
-            loadTilesWhileAnimating: true,
-            loadTilesWhileInteracting: true,
             view: this.olView,
             overlays: [this.olInfowindow],
+            loadTilesWhileAnimating: true,
+            loadTilesWhileInteracting: true,
             layers: [
                 new TileLayer({
                     preload: 4,
                     source: new OSM()
-                }),
-                new VectorLayer({
-                    source: this.olVectorSource,
-                    style: function(feature) {
-                        olStyle.getText().setText(feature.get('name'))
-                        return olStyle
-                    }
                 })
             ]
         })
 
-        this.olFeatureOverlay = new VectorLayer({
-            source: new VectorSource(),
-            map: this.olMap,
-            style: function(feature) {
-                olHighlightStyle.getText().setText(feature.get('name'))
-                return olHighlightStyle
-            }
-        })
+        this.olVectorSource = new VectorSource({});
+
+        this.olMap.addLayer(new VectorLayer({
+            source: this.olVectorSource
+        }));
     },
     methods: {
-        flyTo(location, zoom, done) {
-            const duration = 2000
+        flyTo(location, done) {
+            var duration = 2000
+            var zoom = 6
             var parts = 2
             var called = false
             function callback(complete) {

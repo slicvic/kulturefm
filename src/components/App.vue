@@ -3,6 +3,7 @@
         <welcome-component v-if="welcomeScreen" :loading="welcomeScreenLoading" @start-click="onStartClick"></welcome-component>
         <map-component></map-component>
         <player-component></player-component>
+        <about-component></about-component>
     </div>
 </template>
 
@@ -19,6 +20,7 @@ body {
     import WelcomeComponent from './Welcome.vue'
     import MapComponent from './Map.vue'
     import PlayerComponent from './Player.vue'
+    import AboutComponent from './About.vue'
 
     export default {
         name: 'app-component',
@@ -31,7 +33,8 @@ body {
         components: {
             WelcomeComponent,
             MapComponent,
-            PlayerComponent
+            PlayerComponent,
+            AboutComponent
         },
         methods: {
             onStartClick() {
