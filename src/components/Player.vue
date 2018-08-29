@@ -48,8 +48,8 @@
                         @click="toggleMute">
                         <i :class="[muted ? 'fa fa-fw fa-volume-off' : 'fa fa-fw fa-volume-up']"></i>
                     </button>
-                    <span class="next-stop" v-if="nextDestination">
-                        <span class="font-weight-light">Next stop</span> <i class="fa fa-map-marker-alt"></i> <strong>{{ nextDestination.name }}</strong>
+                    <span class="next-stop" v-if="nextCountry">
+                        <span class="font-weight-light">Next stop</span> <i class="fa fa-map-marker-alt"></i> <strong>{{ nextCountry.name }}</strong>
                     </span>
                 </div>
             </div>
@@ -83,7 +83,7 @@
     background: #000;
 }
 .player .track-cover-ico {
-    font-size: 50px;
+    font-size: 3.125rem;
     color: #777;
     height: 100%;
     padding: 5px;
@@ -154,8 +154,8 @@ export default {
         canSkipToPrev() {
             return this.currentTrackIndex > 0
         },
-        nextDestination() {
-            return this.$store.state.nextDestination
+        nextCountry() {
+            return this.$store.state.nextCountry
         }
     },
     watch: {

@@ -11,7 +11,8 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
-.logo {
+.logo,
+.logo-font {
     font-family: 'Hi Melody', cursive;
 }
 </style>

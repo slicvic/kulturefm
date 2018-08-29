@@ -2,43 +2,43 @@
     <div class="map-basic map">
         <div class="map-canvas" id="map-canvas"></div>
         <div class="map-infowindow" id="map-infowindow">
-            <div v-if="currentLocation">
+            <div v-if="currentCountry">
                 <div class="d-flex mb-3">
-                    <img class="rounded flag-img" :src="currentLocation.flag">
-                    <h4 class="align-self-center ml-3 country-name">{{ currentLocation.name }}</h4>
+                    <img class="rounded flag-img" :src="currentCountry.flag">
+                    <h4 class="align-self-center ml-3 country-name">{{ currentCountry.name }}</h4>
                 </div>
                 <table class="table table-striped table-sm">
                     <tbody>
                         <tr>
                             <th>Capital</th>
-                            <td>{{ currentLocation.capital }}</td>
+                            <td>{{ currentCountry.capital }}</td>
                         </tr>
                         <tr>
                             <th>Population</th>
-                            <td>{{ currentLocation.population.toLocaleString('en') }}</td>
+                            <td>{{ currentCountry.population.toLocaleString('en') }}</td>
                         </tr>
                         <tr>
                             <th>Demonym</th>
-                            <td>{{ currentLocation.demonym }}</td>
+                            <td>{{ currentCountry.demonym }}</td>
                         </tr>
                         <tr>
                             <th>Region</th>
-                            <td>{{ currentLocation.region }}</td>
+                            <td>{{ currentCountry.region }}</td>
                         </tr>
                         <tr>
                             <th>Subregion</th>
-                            <td>{{ currentLocation.subregion }}</td>
+                            <td>{{ currentCountry.subregion }}</td>
                         </tr>
                         <tr>
                             <th>Languages</th>
                             <td>
-                                <span v-for="(l, i) in currentLocation.languages" :key="l.name">{{ l.name }}<span v-if="i < currentLocation.languages.length - 1">, </span></span>
+                                <span v-for="(l, i) in currentCountry.languages" :key="l.name">{{ l.name }}<span v-if="i < currentCountry.languages.length - 1">, </span></span>
                             </td>
                         </tr>
                         <tr>
                             <th>Currencies</th>
                             <td>
-                                <span v-for="(c, i) in currentLocation.currencies" :key="c.name"> {{ c.name }}<span v-if="i < currentLocation.currencies.length - 1">, </span></span>
+                                <span v-for="(c, i) in currentCountry.currencies" :key="c.name"> {{ c.name }}<span v-if="i < currentCountry.currencies.length - 1">, </span></span>
                             </td>
                         </tr>
                     </tbody>
@@ -126,15 +126,15 @@ export default {
         }
     },
     computed: {
-        currentLocation() {
-            return this.$store.getters.currentLocation
+        currentCountry() {
+            return this.$store.getters.currentCountry
         }
     },
     watch: {
-        currentLocation(location) {
-            const coordinates = fromLonLat([location.latlng[1], location.latlng[0]])
+        currentCountry(newCountry) {
+            const coordinates = fromLonLat([newCountry.latlng[1], newCountry.latlng[0]])
 
-            // Fly to location
+            // Fly to country
             this.flyTo(coordinates, () => {
                 // Set infowindow position
                 this.olInfowindow.setPosition(coordinates)
@@ -192,7 +192,7 @@ export default {
         }));
     },
     methods: {
-        flyTo(location, done) {
+        flyTo(coordinates, done) {
             var duration = 2000
             var zoom = 6
             var parts = 2
@@ -209,7 +209,7 @@ export default {
             }
 
             this.olView.animate({
-                center: location,
+                center: coordinates,
                 duration: duration
             }, callback)
 

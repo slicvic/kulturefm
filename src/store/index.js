@@ -11,13 +11,13 @@ export default new Vuex.Store({
         playlist: [],
         currentTrackIndex: -1,
         countries: [],
-        nextDestination: null
+        nextCountry: null
     },
     getters: {
         currentTrack(state) {
             return state.playlist[state.currentTrackIndex]
         },
-        currentLocation(state, getters) {
+        currentCountry(state, getters) {
             return getters.currentTrack ? getters.currentTrack.country : null
         }
     },
@@ -28,8 +28,8 @@ export default new Vuex.Store({
         setCurrentTrackIndex(state, index) {
             state.currentTrackIndex = index
         },
-        setNextDestination(state, country) {
-            state.nextDestination = country
+        setNextCountry(state, country) {
+            state.nextCountry = country
         },
         setCountries(state, countries) {
             state.countries = countries
@@ -48,19 +48,19 @@ export default new Vuex.Store({
         play({commit, state}, {track, country}) {
             commit('addTrack', Object.assign(track, {country}))
             commit('setCurrentTrackIndex', state.playlist.length - 1)
-            let nextDestination = null
-            const prevLocations = [
+            let nextCountry = null
+            const prevCountryCodes = [
                 state.playlist.length ? state.playlist[state.playlist.length - 1].country.code : null,
                 state.playlist.length > 1 ? state.playlist[state.playlist.length - 2].country.code : null,
                 state.playlist.length > 2 ? state.playlist[state.playlist.length - 3].country.code : null
             ]
             do {
-                nextDestination =  _.sample(_.shuffle(state.countries))
-            } while (prevLocations.includes(nextDestination.code))
-            commit('setNextDestination', nextDestination)
+                nextCountry =  _.sample(_.shuffle(state.countries))
+            } while (prevCountryCodes.includes(nextCountry.code))
+            commit('setNextCountry', nextCountry)
         },
         playNext({dispatch, state}) {
-            return dispatch('playRandom', {country: state.nextDestination})
+            return dispatch('playRandom', {country: state.nextCountry})
         },
         playPrev({commit, state}) {
             commit('setCurrentTrackIndex', state.currentTrackIndex - 1)
