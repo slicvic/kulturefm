@@ -6,7 +6,6 @@
             "artists": [
                 "anthony santos",
                 "joe veras",
-                "aventura",
                 "hector acosta",
                 "el torito",
                 "luis vargas",
@@ -22,7 +21,26 @@
                 "el chaval",
                 "luis miguel del amargue",
                 "teodoro reyes",
-                "chichi peralta"
+                "chichi peralta",
+                "cuco valoy",
+                "fefita la grande",
+                "johnny ventura",
+                "sergio vargas",
+                "joseito mateo",
+                "fernando villalona",
+                "bonny cepeda",
+                "los hermanos rosario",
+                "tono rosario",
+                "wilfrido vargas",
+                "milly quezada",
+                "eddy herrera",
+                "anthony rios",
+                "rubby perez",
+                "natti natasha",
+                "sandy y papo",
+                "fulanito",
+                "proyecto uno",
+                "ozuna"
             ]
         },
         {
@@ -49,14 +67,61 @@
             "name": "Cuba",
             "artists": [
                 "celia cruz",
-                "willy chirino"
+                "willy chirino",
+                "orishas",
+                "gente de zona",
+                "rey ruiz",
+                "mongo santamaria",
+                "olga guillot",
+                "gloria estefan"
             ]
         },
         {
-            "code": "in",
-            "name": "India",
+            "code": "pr",
+            "name": "Puerto Rico",
             "artists": [
-                "lucky ali"
+                "hector lavoe",
+                "luis fonsi",
+                "daddy yankee",
+                "ricky martin",
+                "el gran combo de puerto rico",
+                "gilberto santa rosa",
+                "zion y lennox",
+                "wisin y yandel",
+                "nicky jam",
+                "marc anthony",
+                "jose feliciano",
+                "ivy queen",
+                "menudo",
+                "calle 13",
+                "don omar",
+                "tego calderon",
+                "chayanne",
+                "vico c",
+                "elvis crespo",
+                "victor manuelle",
+                "tito rojas",
+                "tito nieves",
+                "cultura profetica",
+                "tito gomez",
+                "bad bunny",
+                "jerry rivera",
+                "cheo feliciano",
+                "ismael rivera",
+                "andy montanez",
+                "eddie santiago",
+                "tego calderon",
+                "frankie ruiz",
+                "tito puente",
+                "ray barretto"
+            ]
+        },
+        {
+            "code": "pa",
+            "name": "Panama",
+            "artists": [
+                "ruben blades",
+                "el general"
             ]
         }
     ]   

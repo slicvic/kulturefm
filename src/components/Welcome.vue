@@ -9,6 +9,7 @@
                 @click="onStartClick">
                 <i :class="{'fa': true, 'fa-fw': true, 'fa-play-circle': !loading, 'fa-spinner fa-spin': loading}"></i>
             </button>
+            <h6 class="slogan primary-font">a music trip...</h6>
         </div>
     </div>
 </template>
@@ -24,8 +25,12 @@
     text-align: center;
 }
 .welcome .logo {
-    font-size: 5.5rem;
-    height: 90px;
+    font-size: 6.5rem;
+    height: 95px;
+}
+.welcome .slogan {
+    font-size: 1.5rem;
+    color: #eee;
 }
 .welcome-start-btn {
     font-size: 6rem;

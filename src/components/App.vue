@@ -12,7 +12,7 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 .logo,
-.logo-font {
+.primary-font {
     font-family: 'Hi Melody', cursive;
 }
 </style>

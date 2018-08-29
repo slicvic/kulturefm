@@ -1,6 +1,6 @@
 <template>
     <div class="about">
-        <span class="logo">kulture.fm</span> with <i class="fa fa-heart"></i> by <a target="_blank" href="http://slicvic.com" class="text-dark logo-font">slicvic.com</a>
+        <span class="logo">kulture.fm</span> with <i class="fa fa-heart"></i> by <a target="_blank" href="http://slicvic.com" class="text-dark primary-font">slicvic.com</a>
     </div>
 </template>
 
