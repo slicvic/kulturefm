@@ -92,7 +92,6 @@
                 "marc anthony",
                 "jose feliciano",
                 "ivy queen",
-                "menudo",
                 "calle 13",
                 "don omar",
                 "tego calderon",
@@ -113,7 +112,8 @@
                 "tego calderon",
                 "frankie ruiz",
                 "tito puente",
-                "ray barretto"
+                "ray barretto",
+                "willie colon"
             ]
         },
         {
@@ -122,6 +122,22 @@
             "artists": [
                 "ruben blades",
                 "el general"
+            ]
+        },
+        {
+            "code": "ja",
+            "name": "Jamaica",
+            "artists": [
+                "bob marley",
+                "beenie man",
+                "sean paul",
+                "shaggy reggae",
+                "mavado",
+                "mr vegas",
+                "elephant man",
+                "the wailers",
+                "wayne wonder",
+                "jimmy cliff"
             ]
         }
     ]   
