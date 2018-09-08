@@ -1,7 +1,7 @@
 <template>
-    <div class="map">
-        <div class="map-canvas" id="map-canvas"></div>
-        <div class="map-infowindow" id="map-infowindow">
+    <div class="ol-map-component">
+        <div class="canvas" id="map-canvas"></div>
+        <div class="infowindow" id="map-infowindow">
             <div v-if="currentCountry">
                 <div class="d-flex mb-3">
                     <img class="rounded flag-img" :src="currentCountry.flag">
@@ -49,20 +49,20 @@
 </template>
 
 <style>
-.map-canvas {
+.ol-map-component .canvas {
     position: fixed;
     width: 100%;
     height: 100%;
 }
-.map .ol-attribution {
+.ol-map-component .ol-attribution {
     top: .5em;
     bottom: auto;
 }
-.map-infowindow .flag-img {
+.ol-map-component .infowindow .flag-img {
     width: 50px;
     height: 35px;
 }
-.map-infowindow {
+.ol-map-component .infowindow {
     position: absolute;
     background-color: #00000080;
     -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
@@ -74,7 +74,7 @@
     left: -50px;
     min-width: 400px;
 }
-.map-infowindow:after {
+.ol-map-component .infowindow:after {
     top: 100%;
     border: solid transparent;
     content: " ";
@@ -87,17 +87,17 @@
     left: 48px;
     margin-left: -10px;
 }
-.map-infowindow .country-name {
+.ol-map-component .infowindow .country-name {
     color: #fff;
 }
-.map-infowindow table {
+.ol-map-component .infowindow table {
     color: #f2f2f2;
 }
-.map-infowindow table th, 
-.map-infowindow table td {
+.ol-map-component .infowindow table th, 
+.ol-map-component .infowindow table td {
     border: 0;
 }
-.map-infowindow .table-striped tbody tr:nth-of-type(odd) {
+.ol-map-component .infowindow .table-striped tbody tr:nth-of-type(odd) {
     background-color: #00000030;
 }
 </style>

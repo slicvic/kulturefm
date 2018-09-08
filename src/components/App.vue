@@ -1,5 +1,5 @@
 <template>
-    <div class="app">
+    <div class="app-component">
         <welcome-component v-if="welcomeScreen" :loading="welcomeScreenLoading" @start-click="onStartClick"></welcome-component>
         <open-layers-map-component></open-layers-map-component>
         <player-component></player-component>
@@ -11,8 +11,7 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
-.logo,
-.primary-font {
+.logo, .primary-font {
     font-family: 'Hi Melody', cursive;
 }
 </style>

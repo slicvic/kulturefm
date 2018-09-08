@@ -5,15 +5,15 @@
 </template>
 
 <style>
-.about {
+.about-component {
     position: fixed;
     bottom: 60px;
     right: 15px;
 }
-.about .logo {
+.about-component .logo {
     font-size: 3.125rem;
 }
-.about a {
+.about-component a {
     text-decoration: underline;
     font-size: 2rem;
 }

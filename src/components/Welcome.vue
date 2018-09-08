@@ -1,9 +1,9 @@
 <template>
-    <div class="welcome d-flex justify-content-center">
+    <div class="welcome-component d-flex justify-content-center">
         <div class="align-self-center">
             <h1 class="logo">kulture.fm</h1>
             <button
-                class="welcome-start-btn btn btn-link"
+                class="start-btn btn btn-link"
                 title="Start culturalizing"
                 :disabled="loading"
                 @click="onStartClick">
@@ -14,7 +14,7 @@
 </template>
 
 <style>
-.welcome {
+.welcome-component {
     position: absolute;
     z-index: 3000;
     width: 100%;
@@ -23,19 +23,19 @@
     color: #fff;
     text-align: center;
 }
-.welcome .logo {
+.welcome-component .logo {
     font-size: 6.5rem;
     height: 95px;
 }
-.welcome-start-btn {
+.welcome-component .start-btn {
     font-size: 6rem;
 }
-.welcome-start-btn,
-.welcome-start-btn:disabled {
+.welcome-component .start-btn,
+.welcome-component .start-btn:disabled {
     color: #476CFB;
     opacity: 1;
 }
-.welcome-start-btn:hover {
+.welcome-component .start-btn:hover {
     color: #3033AB;
 }
 </style>

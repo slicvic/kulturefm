@@ -1,12 +1,12 @@
 <template>
-    <div class="player">
-        <div class="player-inner container-fluid">
+    <div class="player-component">
+        <div class="inner container-fluid">
             <div class="row">
                 <div class="col-md-4">
                     <div class="media track-info" v-if="currentTrack">
                         <img class="track-cover-img" v-if="currentTrack.artwork_url" :src="currentTrack.artwork_url">
                         <i class="fa fa-music track-cover-ico" v-if="!currentTrack.artwork_url"></i>
-                        <div class="media-body align-self-center ml-3 track-title-wrapper">
+                        <div class="media-body align-self-center ml-3 track-title-container">
                             <h6 class="mt-0 track-title" :title="currentTrack.title">{{ currentTrack.title }}</h6>
                         </div>
                     </div>
@@ -58,50 +58,50 @@
 </template>
 
 <style>
-.player-inner {
-    padding-left: 0;
-}
-.player {
+.player-component {
     position: fixed;
     bottom: 0;
     width: 100%;
     height: 60px;
     background-color: rgba(0, 0, 0, .8);
 }
-.player-control {
-    color: #476CFB;
+.player-component .inner {
+    padding-left: 0;
 }
-.player-control:hover {
-    color: #3033AB;
+.player-component .track-info {
+    height: 100%;
 }
-.player-control:disabled {
-    color: #3e4e88;
-}
-.player .track-cover-img {
+.player-component .track-cover-img {
     width: 60px;
     height: 60px;
     background: #000;
 }
-.player .track-cover-ico {
+.player-component .track-cover-ico {
     font-size: 3.125rem;
     color: #777;
     height: 100%;
     padding: 5px;
 }
-.player .track-title-wrapper {
+.player-component .track-title-container {
     overflow: hidden;
 }
-.player .track-info {
-    height: 100%;
-}
-.player .track-title {
+.player-component .track-title {
     color: #ccc;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
-.player .next-stop {
+.player-component .next-stop {
     color: #ccc;
+}
+.player-component .player-control {
+    color: #476CFB;
+}
+.player-component .player-control:hover {
+    color: #3033AB;
+}
+.player-component .player-control:disabled {
+    color: #3e4e88;
 }
 </style>
 
