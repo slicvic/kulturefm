@@ -1,5 +1,5 @@
 <template>
-    <div class="about">
+    <div class="about-component">
         <span class="logo">kulture.fm</span> with <i class="fa fa-heart"></i> by <a target="_blank" href="http://slicvic.com" class="text-dark primary-font">slicvic.com</a>
     </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-    <div class="map-basic map">
+    <div class="ol-map-basic map">
         <div class="map-canvas" id="map-canvas"></div>
         <div class="map-infowindow" id="map-infowindow">
             <div v-if="currentCountry">
@@ -115,7 +115,7 @@ import Point from 'ol/geom/Point.js'
 import {Circle, Fill, Style} from 'ol/style.js'
 
 export default {
-    name: 'map-basic-component',
+    name: 'open-layers-map-basic-component',
     data() {
         return {
             center: fromLonLat([-70.66666666, 19]),

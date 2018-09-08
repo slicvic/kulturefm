@@ -112,8 +112,9 @@ import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
 import TileLayer from 'ol/layer/Tile.js'
 import OSM from 'ol/source/OSM.js'
+
 export default {
-    name: 'map-component',
+    name: 'open-layers-map-component',
     data() {
         return {
             initialZoom: 6,

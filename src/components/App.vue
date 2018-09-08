@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <welcome-component v-if="welcomeScreen" :loading="welcomeScreenLoading" @start-click="onStartClick"></welcome-component>
-        <map-component></map-component>
+        <open-layers-map-component></open-layers-map-component>
         <player-component></player-component>
         <about-component></about-component>
     </div>
@@ -19,7 +19,7 @@ body {
 
 <script>
     import WelcomeComponent from './Welcome.vue'
-    import MapComponent from './Map.vue'
+    import OpenLayersMapComponent from './OpenLayersMap.vue'
     import PlayerComponent from './Player.vue'
     import AboutComponent from './About.vue'
 
@@ -33,7 +33,7 @@ body {
         },
         components: {
             WelcomeComponent,
-            MapComponent,
+            OpenLayersMapComponent,
             PlayerComponent,
             AboutComponent
         },
