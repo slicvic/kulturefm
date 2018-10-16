@@ -1,11 +1,11 @@
 <template>
     <div class="ol-map-component">
-        <div class="canvas" id="map-canvas"></div>
-        <div class="infowindow" id="map-infowindow">
+        <div class="ol-map-component-canvas" id="ol-map-component-canvas"></div>
+        <div class="ol-map-component-iw" id="ol-map-component-iw">
             <div v-if="currentCountry">
                 <div class="d-flex mb-3">
                     <img class="rounded flag-img" :src="currentCountry.flag">
-                    <h4 class="align-self-center ml-3 country-name">{{ currentCountry.name }}</h4>
+                    <h4 class="align-self-center ml-3 country">{{ currentCountry.name }}</h4>
                 </div>
                 <table class="table table-striped table-sm">
                     <tbody>
@@ -49,7 +49,7 @@
 </template>
 
 <style>
-.ol-map-component .canvas {
+.ol-map-component-canvas {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -58,11 +58,11 @@
     top: .5em;
     bottom: auto;
 }
-.ol-map-component .infowindow .flag-img {
+.ol-map-component-iw .flag-img {
     width: 50px;
     height: 35px;
 }
-.ol-map-component .infowindow {
+.ol-map-component-iw {
     position: absolute;
     background-color: #00000080;
     -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
@@ -74,7 +74,7 @@
     left: -50px;
     min-width: 400px;
 }
-.ol-map-component .infowindow:after {
+.ol-map-component-iw:after {
     top: 100%;
     border: solid transparent;
     content: " ";
@@ -87,17 +87,17 @@
     left: 48px;
     margin-left: -10px;
 }
-.ol-map-component .infowindow .country-name {
+.ol-map-component-iw .country {
     color: #fff;
 }
-.ol-map-component .infowindow table {
+.ol-map-component-iw table {
     color: #f2f2f2;
 }
-.ol-map-component .infowindow table th, 
-.ol-map-component .infowindow table td {
+.ol-map-component-iw table th, 
+.ol-map-component-iw table td {
     border: 0;
 }
-.ol-map-component .infowindow .table-striped tbody tr:nth-of-type(odd) {
+.ol-map-component-iw .table-striped tbody tr:nth-of-type(odd) {
     background-color: #00000030;
 }
 </style>
@@ -208,7 +208,7 @@ export default {
         })
 
         this.olInfowindow = new Overlay({
-            element: document.getElementById('map-infowindow'),
+            element: document.getElementById('ol-map-component-iw'),
             autoPan: true,
             autoPanAnimation: {
                 duration: 250
@@ -216,7 +216,7 @@ export default {
         })
 
         this.olMap = new Map({
-            target: 'map-canvas',
+            target: 'ol-map-component-canvas',
             loadTilesWhileAnimating: true,
             loadTilesWhileInteracting: true,
             view: this.olView,

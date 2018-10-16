@@ -1,7 +1,7 @@
 <template>
     <div class="app-component">
         <welcome-component v-if="welcomeScreen" :loading="welcomeScreenLoading" @start-click="onStartClick"></welcome-component>
-        <open-layers-map-component></open-layers-map-component>
+        <google-map-component></google-map-component>
         <player-component></player-component>
         <about-component></about-component>
     </div>
@@ -11,14 +11,14 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
-.logo, .primary-font {
+.logo, .font-primary {
     font-family: 'Hi Melody', cursive;
 }
 </style>
 
 <script>
     import WelcomeComponent from './Welcome.vue'
-    import OpenLayersMapComponent from './OpenLayersMap.vue'
+    import GoogleMapComponent from './GoogleMap.vue'
     import PlayerComponent from './Player.vue'
     import AboutComponent from './About.vue'
 
@@ -32,7 +32,7 @@ body {
         },
         components: {
             WelcomeComponent,
-            OpenLayersMapComponent,
+            GoogleMapComponent,
             PlayerComponent,
             AboutComponent
         },
