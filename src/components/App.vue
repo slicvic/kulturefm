@@ -1,6 +1,6 @@
 <template>
     <div class="app-component">
-        <welcome-component v-if="welcomeScreen" :loading="welcomeScreenLoading" @start-click="onStartClick"></welcome-component>
+        <welcome-component v-if="showWelcomeScreen" :loading="isLoading" @start-click="onStartClick"></welcome-component>
         <google-map-component></google-map-component>
         <player-component></player-component>
         <about-component></about-component>
@@ -18,7 +18,7 @@ body {
 
 <script>
     import WelcomeComponent from './Welcome.vue'
-    import GoogleMapComponent from './GoogleMap.vue'
+    import OpenLayersMap from './OpenLayersMap.vue'
     import PlayerComponent from './Player.vue'
     import AboutComponent from './About.vue'
 
@@ -26,35 +26,33 @@ body {
         name: 'app-component',
         data() {
             return {
-                welcomeScreen: true,
-                welcomeScreenLoading: false
+                showWelcomeScreen: true,
+                isLoading: false
             }
         },
         components: {
             WelcomeComponent,
-            GoogleMapComponent,
+            OpenLayersMap,
             PlayerComponent,
             AboutComponent
         },
         methods: {
             onStartClick() {
-                this.welcomeScreenLoading = true
+                this.isLoading = true
                 
                 this.$store.dispatch('loadCountries')
                     .then(() => {
                         this.$store.dispatch('playRandom')
                             .then(() => {
-                                this.welcomeScreen = false
-                                this.welcomeScreenLoading = false
+                                this.showWelcomeScreen = false
+                                this.isLoading = false
                             })
                             .catch(e => {
-                                console.error(e)
-                                this.welcomeScreenLoading = false
+                                this.isLoading = false
                             })
                     })
                     .catch(e => {
-                        console.error(e)
-                        this.welcomeScreenLoading = false
+                        this.isLoading = false
                     })
             }
         }
