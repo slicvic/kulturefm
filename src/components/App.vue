@@ -1,7 +1,7 @@
 <template>
     <div class="app-component">
         <welcome-component v-if="showWelcomeScreen" :loading="isLoading" @start-click="onStartClick"></welcome-component>
-        <google-map-component></google-map-component>
+        <open-layers-map></open-layers-map>
         <player-component></player-component>
         <about-component></about-component>
     </div>
