@@ -2,7 +2,7 @@
 
 A free internet radio that plays music from around the world.
 
-[kulturefm.slicvic.com](http://kulturefm.slicvic.com)
+[kulturefm.slicvic.com](https://kulturefm.slicvic.com)
 
 ## Project setup
 
