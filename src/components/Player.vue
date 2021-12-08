@@ -49,7 +49,7 @@
                         <i :class="[muted ? 'fa fa-fw fa-volume-off' : 'fa fa-fw fa-volume-up']"></i>
                     </button>
                     <span class="next-stop" v-if="nextCountry">
-                        <span class="font-weight-light">Next stop</span> <i class="fa fa-map-marker-alt"></i> <strong>{{ nextCountry.name }}</strong>
+                        <span class="font-weight-light">Next stop</span> <i class="fa fa-map-marker-alt"></i> <strong>{{ nextCountry.name.common }}</strong>
                     </span>
                 </div>
             </div>
@@ -63,7 +63,7 @@
     bottom: 0;
     width: 100%;
     height: 60px;
-    background-color: rgba(0, 0, 0, .8);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 .player-component .inner {
     padding-left: 0;
@@ -95,10 +95,10 @@
     color: #ccc;
 }
 .player-component .player-control {
-    color: #476CFB;
+    color: #476cfb;
 }
 .player-component .player-control:hover {
-    color: #3033AB;
+    color: #3033ab;
 }
 .player-component .player-control:disabled {
     color: #3e4e88;
@@ -117,7 +117,7 @@ const State = {
     PLAYING: 'playing',
     PAUSED: 'paused',
     FINISHED: 'finished',
-    ERROR: 'error'
+    ERROR: 'error',
 }
 
 export default {
@@ -126,7 +126,7 @@ export default {
         return {
             state: State.IDLE,
             muted: false,
-            audioObj: null
+            audioObj: null,
         }
     },
     computed: {
@@ -156,14 +156,14 @@ export default {
         },
         nextCountry() {
             return this.$store.state.nextCountry
-        }
+        },
     },
     watch: {
         currentTrack(track) {
             this.loadTrack(track)
                 .then(() => this.play())
                 .catch(console.error)
-        }
+        },
     },
     methods: {
         next() {
@@ -187,7 +187,7 @@ export default {
             this.audioObj.setVolume(this.muted ? 0 : 1)
         },
         togglePlay() {
-            (this.state === State.PAUSED) ? this.play() : this.pause()
+            this.state === State.PAUSED ? this.play() : this.pause()
         },
         loadTrack(track) {
             if (this.audioObj) {
@@ -195,14 +195,15 @@ export default {
             }
 
             return new Promise((resolve, reject) => {
-                soundcloudSvc.streamTrack(track.id)
-                    .then(player => {
+                soundcloudSvc
+                    .streamTrack(track.id)
+                    .then((player) => {
                         this.audioObj = player
                         if (this.muted) {
                             this.audioObj.setVolume(0)
                         }
                         this.audioObj.on('state-change', (state) => {
-                            switch(state) {
+                            switch (state) {
                                 case 'paused':
                                     this.state = State.PAUSED
                                     break
@@ -223,12 +224,13 @@ export default {
                             }
                         })
                         resolve()
-                    }).catch(e => {
+                    })
+                    .catch((e) => {
                         this.state = State.ERROR
                         reject(e)
                     })
-                })
-        }
-    }
+            })
+        },
+    },
 }
 </script>

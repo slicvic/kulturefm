@@ -9,6 +9,7 @@
                 @click="onStartClick">
                 <i :class="{'fa': true, 'fa-fw': true, 'fa-play-circle': !loading, 'fa-spinner fa-spin': loading}"></i>
             </button>
+            <h6 class="slogan font-primary">a music trip...</h6>
         </div>
     </div>
 </template>
@@ -27,16 +28,20 @@
     font-size: 6.5rem;
     height: 95px;
 }
+.welcome-component .slogan {
+    font-size: 1.5rem;
+    color: #eee;
+}
 .welcome-component .start-btn {
     font-size: 6rem;
 }
 .welcome-component .start-btn,
 .welcome-component .start-btn:disabled {
-    color: #476CFB;
+    color: #476cfb;
     opacity: 1;
 }
 .welcome-component .start-btn:hover {
-    color: #3033AB;
+    color: #3033ab;
 }
 </style>
 
@@ -46,13 +51,13 @@ export default {
     props: {
         loading: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
     methods: {
         onStartClick() {
             this.$emit('start-click')
-        }
-    }
+        },
+    },
 }
 </script>

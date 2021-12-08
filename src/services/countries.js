@@ -6,32 +6,41 @@ firebase.initializeApp(config.firebase)
 const firestore = firebase.firestore()
 
 firestore.settings({
-    timestampsInSnapshots: true
+    timestampsInSnapshots: true,
 })
 
 const all = function() {
     return new Promise((resolve, reject) => {
-            // Fetch countries from firebase
-            firebase.database().ref('/countries').once('value')
-                .then(snapshot => {
-                    // Fetch countries details from api
-                    axios.get('https://restcountries.eu/rest/v2/all') 
-                        .then(countriesDetails => {
-                            let countries = []
-                            snapshot.val().forEach(country => {
-                                let countryDetails = countriesDetails.data.find(c => {
-                                    return country.code.toUpperCase() === c.alpha2Code.toUpperCase()
-                                })
-                                if (countryDetails) {
-                                    countries.push(Object.assign(country, countryDetails))
-                                }
-                            })
-                            resolve(countries)
-                        }).catch(e => reject(e))
-                }).catch(e => reject(e))
-        })
+        // Fetch countries from firebase
+        firebase
+            .database()
+            .ref('/countries')
+            .once('value')
+            .then((snapshot) => {
+                // Fetch country info from api
+                axios
+                    .get('https://restcountries.com/v3.1/all')
+                    .then((countriesResponse) => {
+                        const result = []
+                        snapshot.val().forEach((country) => {
+                            const countryResponse = countriesResponse.data.find(
+                                (c) =>
+                                    country.code.toUpperCase() ===
+                                    c.cca2.toUpperCase()
+                            )
+                            countryResponse &&
+                                result.push(
+                                    Object.assign(country, countryResponse)
+                                )
+                        })
+                        resolve(result)
+                    })
+                    .catch((e) => reject(e))
+            })
+            .catch((e) => reject(e))
+    })
 }
 
 export default {
-    all
+    all,
 }

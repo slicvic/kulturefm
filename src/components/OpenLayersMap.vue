@@ -4,23 +4,23 @@
         <div class="ol-map-component-iw" id="ol-map-component-iw">
             <div v-if="currentCountry">
                 <div class="d-flex mb-3">
-                    <img class="rounded flag-img" :src="currentCountry.flag">
-                    <h4 class="align-self-center ml-3 country">{{ currentCountry.name }}</h4>
+                    <img class="rounded flag-img" :src="currentCountry.flags.png">
+                    <h4 class="align-self-center ml-3 country">{{ currentCountry.name.common }}</h4>
                 </div>
                 <table class="table table-striped table-sm">
                     <tbody>
                         <tr>
                             <th>Capital</th>
-                            <td>{{ currentCountry.capital }}</td>
+                            <td>{{ currentCountry.capital[0] }}</td>
                         </tr>
                         <tr>
                             <th>Population</th>
                             <td>{{ currentCountry.population.toLocaleString('en') }}</td>
                         </tr>
-                        <tr>
+                        <!--<tr>
                             <th>Demonym</th>
                             <td>{{ currentCountry.demonym }}</td>
-                        </tr>
+                        </tr>-->
                         <tr>
                             <th>Region</th>
                             <td>{{ currentCountry.region }}</td>
@@ -32,13 +32,13 @@
                         <tr>
                             <th>Languages</th>
                             <td>
-                                <span v-for="(l, i) in currentCountry.languages" :key="l.name">{{ l.name }}<span v-if="i < currentCountry.languages.length - 1">, </span></span>
+                                {{ languages.join(', ') }}
                             </td>
                         </tr>
                         <tr>
                             <th>Currencies</th>
                             <td>
-                                <span v-for="(c, i) in currentCountry.currencies" :key="c.name"> {{ c.name }}<span v-if="i < currentCountry.currencies.length - 1">, </span></span>
+                                {{ currencies.join(', ') }}
                             </td>
                         </tr>
                     </tbody>
@@ -55,7 +55,7 @@
     height: 100%;
 }
 .ol-map-component .ol-attribution {
-    top: .5em;
+    top: 0.5em;
     bottom: auto;
 }
 .ol-map-component-iw .flag-img {
@@ -65,8 +65,8 @@
 .ol-map-component-iw {
     position: absolute;
     background-color: #00000080;
-    -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+    -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
     padding: 15px;
     border-radius: 10px;
     border: 0;
@@ -77,12 +77,12 @@
 .ol-map-component-iw:after {
     top: 100%;
     border: solid transparent;
-    content: " ";
+    content: ' ';
     height: 0;
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-top-color: rgba(0,0,0,.2);
+    border-top-color: rgba(0, 0, 0, 0.2);
     border-width: 10px;
     left: 48px;
     margin-left: -10px;
@@ -93,7 +93,7 @@
 .ol-map-component-iw table {
     color: #f2f2f2;
 }
-.ol-map-component-iw table th, 
+.ol-map-component-iw table th,
 .ol-map-component-iw table td {
     border: 0;
 }
@@ -103,11 +103,11 @@
 </style>
 
  <script>
-import {Map, View} from 'ol'
-import {fromLonLat} from 'ol/proj.js'
+import { Map, View } from 'ol'
+import { fromLonLat } from 'ol/proj.js'
 import Overlay from 'ol/Overlay.js'
-import GeoJSON from 'ol/format/GeoJSON.js';
-import {Stroke, Text, Fill, Style} from 'ol/style.js';
+import GeoJSON from 'ol/format/GeoJSON.js'
+import { Stroke, Text, Fill, Style } from 'ol/style.js'
 import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
 import TileLayer from 'ol/layer/Tile.js'
@@ -123,38 +123,52 @@ export default {
             olView: null,
             olInfowindow: null,
             olVectorSource: null,
-            olFeatureOverlay: null
+            olFeatureOverlay: null,
         }
     },
     computed: {
         currentCountry() {
             return this.$store.getters.currentCountry
-        }
+        },
+        languages() {
+            const { languages } = this.currentCountry
+            return Object.keys(languages).map((k) => languages[k])
+        },
+        currencies() {
+            const { currencies } = this.currentCountry
+            return Object.keys(currencies).map((k) => currencies[k].name)
+        },
     },
     watch: {
         currentCountry(newCountry) {
-            const coordinates = fromLonLat([newCountry.latlng[1], newCountry.latlng[0]])
+            const coordinates = fromLonLat([
+                newCountry.latlng[1],
+                newCountry.latlng[0],
+            ])
 
             this.flyTo(coordinates, 5, () => {
                 this.olInfowindow.setPosition(coordinates)
-
-                const feature = this.olVectorSource.getFeatureById(newCountry.alpha3Code)
+                const feature = this.olVectorSource.getFeatureById(
+                    newCountry.cca3
+                )
                 const cnv = document.createElement('canvas')
                 const ctx = cnv.getContext('2d')
                 const img = new Image()
                 img.src = newCountry.flag
                 img.onload = function() {
                     const pattern = ctx.createPattern(img, 'repeat')
-                    feature.setStyle(new Style({
-                        fill: new Fill({
-                            color: pattern
+                    feature.setStyle(
+                        new Style({
+                            fill: new Fill({
+                                color: pattern,
+                            }),
                         })
-                    }))
+                    )
                 }
 
                 this.olFeatureOverlay.getSource().addFeature(feature)
             })
-        }
+        },
     },
     mounted() {
         const olStyle = new Style({
@@ -168,13 +182,13 @@ export default {
             text: new Text({
                 font: '12px Roboto,sans-serif',
                 fill: new Fill({
-                    color: '#000'
+                    color: '#000',
                 }),
                 stroke: new Stroke({
                     color: '#fff',
-                    width: 3
-                })
-            })
+                    width: 3,
+                }),
+            }),
         })
 
         const olHighlightStyle = new Style({
@@ -188,31 +202,32 @@ export default {
             text: new Text({
                 font: '12px Roboto,sans-serif',
                 fill: new Fill({
-                    color: '#000'
+                    color: '#000',
                 }),
                 stroke: new Stroke({
                     color: '#f00',
-                    width: 3
-                })
-            })
+                    width: 3,
+                }),
+            }),
         })
 
         this.olView = new View({
             center: this.initialCenter,
-            zoom: this.initialZoom
+            zoom: this.initialZoom,
         })
 
         this.olVectorSource = new VectorSource({
-            url: 'https://openlayers.org/en/latest/examples/data/geojson/countries.geojson',
-            format: new GeoJSON()
+            url:
+                'https://openlayers.org/en/latest/examples/data/geojson/countries.geojson',
+            format: new GeoJSON(),
         })
 
         this.olInfowindow = new Overlay({
             element: document.getElementById('ol-map-component-iw'),
             autoPan: true,
             autoPanAnimation: {
-                duration: 250
-            }
+                duration: 250,
+            },
         })
 
         this.olMap = new Map({
@@ -224,16 +239,16 @@ export default {
             layers: [
                 new TileLayer({
                     preload: 4,
-                    source: new OSM()
+                    source: new OSM(),
                 }),
                 new VectorLayer({
                     source: this.olVectorSource,
                     style: function(feature) {
                         olStyle.getText().setText(feature.get('name'))
                         return olStyle
-                    }
-                })
-            ]
+                    },
+                }),
+            ],
         })
 
         this.olFeatureOverlay = new VectorLayer({
@@ -242,7 +257,7 @@ export default {
             style: function(feature) {
                 olHighlightStyle.getText().setText(feature.get('name'))
                 return olHighlightStyle
-            }
+            },
         })
     },
     methods: {
@@ -261,19 +276,26 @@ export default {
                 }
             }
 
-            this.olView.animate({
-                center: coordinates,
-                duration: duration
-            }, callback)
+            this.olView.animate(
+                {
+                    center: coordinates,
+                    duration: duration,
+                },
+                callback
+            )
 
-            this.olView.animate({
-                zoom: zoom - 1,
-                duration: duration / 2
-            }, {
-                zoom: zoom,
-                duration: duration / 2
-            }, callback)
-        }
-    }
+            this.olView.animate(
+                {
+                    zoom: zoom - 1,
+                    duration: duration / 2,
+                },
+                {
+                    zoom: zoom,
+                    duration: duration / 2,
+                },
+                callback
+            )
+        },
+    },
 }
 </script>
